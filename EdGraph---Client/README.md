@@ -1,1 +1,1 @@
-# EdGraph---Client
+# NeuralNavigate---Client
