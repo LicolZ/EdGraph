@@ -5,13 +5,11 @@
     <node id="walk on spheres" />
     <node id="elliptic partial differential equations" />
     <node id="mesh generation" />
-    <node id="global solves" />
     <node id="fast caching strategy" />
     <node id="boundary integral formulation" />
     <node id="virtual point light methods" />
     <node id="photorealistic rendering" />
     <edge source="grid-free Monte Carlo methods" target="Walk on spheres" />
-    <edge source="elliptic partial differential equations" target="Grid-free Monte Carlo methods" />
     <edge source="global solves" target="Fast caching strategy" />
     <edge source="boundary integral formulation" target="Fast caching strategy" />
     <edge source="photorealistic rendering" target="Virtual point light methods" />
