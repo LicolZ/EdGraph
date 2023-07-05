@@ -1,4 +1,4 @@
-# EdGraph
+# NeuralNavigate
 EdTech tool leveraging machine learning to deconstruct complex research papers and generate interactive learning graphs. These graphs serve as intuitive roadmaps, guiding users through the learning journey by mapping key sequential patterns between necessary foundational concepts within any given research paper.
 
 Phase 1: Ideation and Conceptualization
