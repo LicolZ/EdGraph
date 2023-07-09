@@ -7,7 +7,6 @@ import string
 from nltk.stem.wordnet import WordNetLemmatizer
 
 import openai
-import requests
 
 ### text extraction ###
 
@@ -55,11 +54,12 @@ words = preprocess_text(text)
 sentences = text.split('. ')
 
 # preprocess each sentence with the model
-for sentence in sentences[:3]:
+for sentence in sentences[3:4]:
+    print("sentece:", sentence)
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
     model="text-davinci-003",
-    prompt="Explain the following text in simple terms: " + sentence,
+    prompt="Given the following sentence, extract all the topics." + sentence,
         max_tokens=100, temperature=0
     )
 
@@ -67,6 +67,7 @@ print(response.choices[0].text.strip())
 
 
 ### topic identification ###
+
 
 
 
