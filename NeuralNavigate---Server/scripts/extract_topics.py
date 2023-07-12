@@ -8,6 +8,10 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 import openai
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+
 ### text extraction ###
 
 # function to extract text from pdf

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-
+import { Helmet } from 'react-helmet'; 
 import axios from 'axios';
 
 function FileUploadComponent() {
@@ -41,12 +40,14 @@ function FileUploadComponent() {
         return () => {
           window.removeEventListener("resize", handleResize);
         };
-      }, []);
+    }, []);
       
-
 
     return (
         <div className="container">
+            <Helmet>
+              <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet"/>
+            </Helmet>
             <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
             <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
             <button onClick={submitFile}>Generate Graph</button>
