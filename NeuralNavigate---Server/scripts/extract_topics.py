@@ -23,7 +23,7 @@ def extract_text_from_pdf(file_path):
     return text
 
 # set path
-pdf_file_path = '/Users/USER/Desktop/projects/NeuralNavigate/NeuralNavigate---Server/data/raw/BoundaryValueCaching.pdf'
+pdf_file_path = '/Users/USER/Desktop/projects/NeuralNavigate/NeuralNavigate---Server/data/raw/BoundaryValueCaching1.pdf'
 
 # extract text from pdf
 text = extract_text_from_pdf(pdf_file_path)
@@ -48,25 +48,29 @@ def preprocess_text(text):
 words = preprocess_text(text)
 
 
-### NLU and knowledge extraction ###
+### NLU and topic extraction ###
 
 # split the text into sentences (i.e. "segments")
 sentences = text.split('. ')
+topics = []
 
-# preprocess each sentence with the model
-for sentence in sentences[3:4]:
-    print("sentece:", sentence)
+# for each preprocessed sentence, use GPT model to extract topics
+for sentence in sentences:
+    
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
     model="text-davinci-003",
-    prompt="Given the following sentence, extract all the topics." + sentence,
-        max_tokens=100, temperature=0
-    )
+    prompt="Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence." + sentence,
+        max_tokens=100, temperature=0)
+    
+    # Add the extracted topics to the list
+    topics.append(response.choices[0].text.strip())
 
-print(response.choices[0].text.strip())
 
+# Check the topics
+for topic in topics:
+    print(topic)
 
-### topic identification ###
 
 
 
