@@ -1,10 +1,18 @@
 import os
 import PyPDF2
-import spacy
 import string
-import nltk
 import string
 from nltk.stem.wordnet import WordNetLemmatizer
+
+import certifi
+import os
+import ssl
+
+if not os.environ.get('SSL_CERT_FILE'):
+    os.environ['SSL_CERT_FILE'] = certifi.where()
+
+import nltk
+nltk.download('punkt')
 
 import openai
 
@@ -27,15 +35,13 @@ def extract_text_from_pdf(file_path):
     return text
 
 # set path
-pdf_file_path = '/Users/USER/Desktop/projects/NeuralNavigate/NeuralNavigate---Server/data/raw/BoundaryValueCaching1.pdf'
+pdf_file_path = '/Users/USER/Desktop/projects/NeuralNavigate/neural-navigate-server/data/raw/BoundaryValueCaching1.pdf'
 
 # extract text from pdf
 text = extract_text_from_pdf(pdf_file_path)
 
 
 ### text preprocessing and segmentation ###
-
-nltk.download('punkt')
 
 def preprocess_text(text):
     # lowercase text
@@ -59,7 +65,7 @@ sentences = text.split('. ')
 topics = []
 
 # for each preprocessed sentence, use GPT model to extract topics
-for sentence in sentences:
+for sentence in sentences[1:5]:
     
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
