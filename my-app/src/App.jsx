@@ -4,6 +4,7 @@ import axios from 'axios';
 
 function FileUploadComponent() {
     const [file, setFile] = useState(null);
+    const [topics, setTopics] = useState([]);
 
     const submitFile = () => {
         const formData = new FormData();
@@ -16,7 +17,7 @@ function FileUploadComponent() {
         })
         .then(response => {
             // Handle response here
-            console.log(response.data.topics);
+            setTopics(response.data.topics);
         });
     };
 
@@ -51,8 +52,14 @@ function FileUploadComponent() {
             <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
             <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
             <button onClick={submitFile}>Generate Graph</button>
+
             <div id="topicsContainer">
-                {/* Topics will be generated here */}
+                {topics.map((topic, i) =>
+                <button key={i} onClick={() => {/* Handle button click here */}}>
+                  {topic}
+                </button>
+                
+                )}
             </div>
         </div>
     );
