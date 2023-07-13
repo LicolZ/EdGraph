@@ -17,8 +17,12 @@ nltk.download('punkt')
 import openai
 
 from django.http import JsonResponse
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
+
 
 ### text extraction ###
 
@@ -60,29 +64,40 @@ words = preprocess_text(text)
 
 ### NLU and topic extraction ###
 
-# split the text into sentences (i.e. "segments")
-sentences = text.split('. ')
-topics = []
-
 # for each preprocessed sentence, use GPT model to extract topics
-for sentence in sentences[1:5]:
-    
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt="Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence." + sentence,
-        max_tokens=100, temperature=0)
-    
-    # Add the extracted topics to the list
-    topics.append(response.choices[0].text.strip())
+# create Django view to handle file uploads
+class FileUploadView(APIView):
+    parser_class = (FileUploadParser)
+    def post(self, request, *args, **kwags):
+        if 'file' not in request.data:
+            return Response({"error": "No file was included in the request"}, status=400)
+        file = request.data['file']
+        path = default_storage.save('tmp/' + file.name, file)
 
+        text = extract_text_from_pdf(path)
+        words = preprocess_text(text)
 
-# Check the topics
-for topic in topics:
-    print(topic)
+        # split the text into sentences (i.e. "segments")
+        sentences = text.split('. ')
+        topics = []
 
+        for sentence in sentences[1:5]:
+            openai.api_key = os.getenv("OPENAI_API_KEY")
+            response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt="Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence." + sentence,
+                max_tokens=100, temperature=0)
+            
+            # Add the extracted topics to the list
+            topics.append(response.choices[0].text.strip())
 
+        # Django view is reached via POST requests at /process/ 
+        # return a JSON response containing the topics
+        return JsonResponse({"topics": topics})
 
+# # Check the topics
+# for topic in topics:
+#     print(topic)
 
 
 # nlp = spacy.load("en_core_web_sm")
