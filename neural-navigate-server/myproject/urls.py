@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from myproject.views import ProcessFileView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('process/', ProcessFileView.as_view(), name='process_file'),
 ]
