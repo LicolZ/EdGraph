@@ -1,4 +1,4 @@
-from myproject.scripts.extract_topics import ProcessFile
+from scripts.extract_topics import ProcessFile
 
 if __name__ == "__main__":
     # Provide a path to a PDF file for testing

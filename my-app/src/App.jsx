@@ -5,8 +5,11 @@ import axios from 'axios';
 function FileUploadComponent() {
     const [file, setFile] = useState(null);
     const [topics, setTopics] = useState([]);
+    const [loading, setLoading] = useState(false);
+
 
     const submitFile = () => {
+        setLoading(true);
         const formData = new FormData();
         formData.append('file', file);
 
@@ -16,9 +19,10 @@ function FileUploadComponent() {
             },
         })
         .then(response => {
-            // Handle response here
+            // handle response 
             setTopics(response.data.topics);
-        });
+        })
+        .finally(() => setLoading(false));
     };
 
     useEffect(() => {
@@ -51,7 +55,7 @@ function FileUploadComponent() {
             </Helmet>
             <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
             <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
-            <button onClick={submitFile}>Generate Graph</button>
+            <button onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
 
             <div id="topicsContainer">
                 {topics.map((topic, i) =>

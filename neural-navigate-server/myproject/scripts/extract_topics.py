@@ -32,26 +32,29 @@ class ProcessFile:
     def extract_topics(self):
         # Extract text from pdf
         text = self.extract_text_from_pdf()
-        preprocessed_words = self.preprocess_text(text)
-
-        # join the words back into a string
-        preprocessed_text = ' '.join(preprocessed_words)
 
         # Split the text into sentences (i.e. "segments")
-        sentences = sent_tokenize(preprocessed_text)
-
+        sentences = sent_tokenize(text)
+        
         topics = []
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
         for sentence in sentences[1:5]:
+
+            # preprocess and join the words back into a string
+            preprocessed_words = self.preprocess_text(sentence)
+
+            preprocessed_string = ' '.join(preprocessed_words)
+
             response = openai.Completion.create(
                 model="text-davinci-003",
-                prompt="Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence." + sentence,
+                prompt="Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence." + preprocessed_string,
                 max_tokens=100, 
                 temperature=0)
+            
             # Add the extracted topics to the list
             topics.append(response.choices[0].text.strip())
 
-            print(topics)
+            # print(topics)
 
         return topics
