@@ -49,24 +49,25 @@ function FileUploadComponent() {
       
 
     return (
-        <div className="container">
-            <Helmet>
+      <div className="container">
+          <Helmet>
+              <title>NeuralNavigate</title> 
               <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet"/>
-            </Helmet>
-            <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
-            <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
-            <button onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
+          </Helmet>
+          <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
+          <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
+          <button onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
 
-            <div id="topicsContainer">
-                {topics.map((topic, i) =>
-                <button key={i} onClick={() => {/* Handle button click here */}}>
-                  {topic}
-                </button>
-                
-                )}
-            </div>
-        </div>
-    );
+          <div id="topicsContainer">
+              {topics.map((topic, i) =>
+              <button key={i} onClick={() => {/* handle button click here */}}>
+                {topic}
+              </button>
+              
+              )}
+          </div>
+      </div>
+  );
 }
 
 export default FileUploadComponent;
