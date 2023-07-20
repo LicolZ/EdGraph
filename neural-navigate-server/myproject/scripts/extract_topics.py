@@ -4,6 +4,7 @@ import string
 import nltk
 from nltk import sent_tokenize
 import openai
+import re
 
 class ProcessFile:
     def __init__(self, file_path):
@@ -21,40 +22,32 @@ class ProcessFile:
         return text
 
     def preprocess_text(self, text):
-        # Lowercase text
         text = text.lower()
-        # Remove punctuation
-        text = text.translate(str.maketrans('', '', string.punctuation))
-        # Tokenize text
         words = nltk.word_tokenize(text)
+        words = [''.join(ch for ch in word if ch.isalnum() or ch == '-') for word in words]  # Keep hyphens within words
         return words
 
     def extract_topics(self):
-        # Extract text from pdf
         text = self.extract_text_from_pdf()
-
-        # Split the text into sentences (i.e. "segments")
         sentences = sent_tokenize(text)
-        
-        topics = []
+
+        topics = set()
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
-        for sentence in sentences[1:5]:
-
-            # preprocess and join the words back into a string
-            preprocessed_words = self.preprocess_text(sentence)
-
-            preprocessed_string = ' '.join(preprocessed_words)
-
+        for sentence in sentences[0:1]:
+            preprocessed_string = ' '.join(self.preprocess_text(sentence))
             response = openai.Completion.create(
                 model="text-davinci-003",
-                prompt="Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence." + preprocessed_string,
+                prompt=f"Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence. {preprocessed_string}",
                 max_tokens=100, 
                 temperature=0)
-            
-            # Add the extracted topics to the list
-            topics.append(response.choices[0].text.strip())
 
-            # print(topics)
+            response_text = response.choices[0].text.strip().lower()
+            extracted_topics = re.split(' - |\n', re.sub(r'\d+\.\s*', '', response_text))
 
-        return topics
+            # Remove 'abstract ' from the start of each topic and '-' at the beginning
+            processed_topics = [topic.lstrip('- ').replace('abstract ', '') for topic in extracted_topics if topic and not topic.isspace()]
+
+            topics.update(processed_topics)
+
+        return list(topics)
