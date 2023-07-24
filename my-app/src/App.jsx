@@ -12,7 +12,11 @@ function FileUploadComponent() {
     const formData = new FormData();
     formData.append('file', file);
 
-    axios.post('http://localhost:4000/process/', formData, {
+    // axios.post('http://localhost:4000/process/', formData, {
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+    // empty string as default
+    axios.post(`${baseUrl}/process/`, formData, {
+    // axios.post('http://neuralnavigate-prod-env.eba-jpr6yccf.us-west-1.elasticbeanstalk.com/process/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
