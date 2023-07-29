@@ -9,19 +9,27 @@ import './index.css';
 
 const nodesPerRow = 5; // number of nodes in one row
 
-function createNode(topic, index) {
+function createNode(topic, index, totalNodes) {
   const rowIndex = Math.floor(index / nodesPerRow);
   const columnIndex = index % nodesPerRow;
 
   const nodeGap = 50; // Distance between nodes
   
+  // calculate total width and height based on node count and gap
+  const totalWidth = (nodesPerRow - 1) * nodeGap;
+  const totalHeight = (Math.ceil(totalNodes / nodesPerRow) - 1) * nodeGap;
+
   return {
     id: `node-${index}`,
     type: 'default',
     data: { label: topic },
-    position: { x: columnIndex * nodeGap, y: rowIndex * nodeGap },
+    position: { 
+      x: columnIndex * nodeGap - totalWidth / 2, 
+      y: rowIndex * nodeGap - totalHeight / 2 
+    },
   };
 }
+
 
 function FileUploadComponent() {
   const [file, setFile] = useState(null);
@@ -72,7 +80,7 @@ function FileUploadComponent() {
     })
     .then(response => {
       const topics = response.data.topics;
-      const newNodes = topics.map((topic, i) => createNode(topic, i));
+      const newNodes = topics.map((topic, i) => createNode(topic, i, topics.length));
       let newElements = [...newNodes];
   
       newElements = createEdges(newNodes, newElements);
@@ -123,7 +131,7 @@ function FileUploadComponent() {
       <div id="topicsContainer">
       <ReactFlow 
         elements={elements} 
-        className="flow"
+        style={{ width: '100%', height: '100%' }}
         proOptions={{ hideAttribution: true }}
       >
         <MiniMap
@@ -134,6 +142,7 @@ function FileUploadComponent() {
         <Controls />
         <Background color="#aaa" gap={16} />
       </ReactFlow>
+
       </div>
     </div>
   );

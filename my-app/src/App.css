@@ -6,7 +6,7 @@
   }
   
   #uploadButton {
-    width: 47%;
+    width: 135%;
     padding: 10px;
     background-color: #000000;
     color: #ffffff;
@@ -24,17 +24,20 @@
   .react-flow__node-default {
     background-color: #4CAF50; /* Sets the node background color */
     border-radius: 5px; /* Gives nodes rounded corners */
-    width: 100px; /* Sets the width of the nodes */
+    width: 500px; /* Sets the width of the nodes */
     height: 50px; /* Sets the height of the nodes */
     
   }
   
   .react-flow__node-default .react-flow__node-data {
-    color: #FFFFFF; /* Sets the label color */
+    color: #333376; /* Sets the label color */
     font-size: 18px; /* Sets the label font size */
   }
   
-  .flow {
+.flow {
+    display: flex;    /* This will make the element a flex container */
+    justify-content: center; /* This will center the child elements horizontally */
+    align-items: center;  /* This will center the child elements vertically */
     width: 100%;  /* set to 100% of the parent container */
     height: 80vh;  /* set to 80% of the viewport height */
   }  
