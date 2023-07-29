@@ -1,32 +1,92 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet'; 
 import axios from 'axios';
+import ReactFlow, { MiniMap, Controls, Background } from 'reactflow';
+import 'reactflow/dist/style.css';
+
+import './App.css';
+import './index.css';
+
+const nodesPerRow = 5; // number of nodes in one row
+
+function createNode(topic, index) {
+  const rowIndex = Math.floor(index / nodesPerRow);
+  const columnIndex = index % nodesPerRow;
+
+  const nodeGap = 50; // Distance between nodes
+  
+  return {
+    id: `node-${index}`,
+    type: 'default',
+    data: { label: topic },
+    position: { x: columnIndex * nodeGap, y: rowIndex * nodeGap },
+  };
+}
 
 function FileUploadComponent() {
   const [file, setFile] = useState(null);
-  const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [elements, setElements] = useState([]);
+
+  const connectionExists = (source, target, elements) => {
+    return elements.some(element => {
+      return (
+        (element.source === source && element.target === target) ||
+        (element.source === target && element.target === source)
+      );
+    });
+  };
+
+  const createEdges = (newNodes, newElements) => {
+    console.log("Creating edges for nodes: ", newNodes);
+    for (let i = 0; i < newNodes.length - 1; i++) {
+      for (let j = i + 1; j < newNodes.length; j++) {
+        const source = newNodes[i].id;
+        const target = newNodes[j].id;
+        if (!connectionExists(source, target, newElements)) {
+          newElements.push({
+            id: `edge-${source}-${target}`,
+            source: source,
+            target: target,
+            animated: true,
+          });
+        }
+      }
+    }
+    console.log("New elements with edges: ", newElements);
+    return newElements;
+  };
 
   const submitFile = () => {
+    
     setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
-
-    // axios.post('http://localhost:4000/process/', formData, {
+  
     const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-    // empty string as default
+    
     axios.post(`${baseUrl}/process/`, formData, {
-    // axios.post('http://neuralnavigate-prod-env.eba-jpr6yccf.us-west-1.elasticbeanstalk.com/process/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
     .then(response => {
-      setTopics(response.data.topics);
+      const topics = response.data.topics;
+      const newNodes = topics.map((topic, i) => createNode(topic, i));
+      let newElements = [...newNodes];
+  
+      newElements = createEdges(newNodes, newElements);
+      setElements(newElements);
     })
+    
     .finally(() => setLoading(false));
   };
-
+  
+  // UseEffect to track changes in 'elements'
+  useEffect(() => {
+    console.log('Elements state updated: ', elements);
+  }, [elements]);
+  
   useEffect(() => {
     const handleResize = () => {
       const title = document.getElementById("upload-text");
@@ -61,11 +121,19 @@ function FileUploadComponent() {
         <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
       </div>
       <div id="topicsContainer">
-        {topics.map((topic, i) => (
-          <button key={i} onClick={() => {/* handle button click here */}}>
-            {topic}
-          </button>
-        ))}
+      <ReactFlow 
+        elements={elements} 
+        className="flow"
+        proOptions={{ hideAttribution: true }}
+      >
+        <MiniMap
+          nodeStrokeColor={(n) => '#fff'}
+          nodeColor={(n) => '#1A192B'}
+          nodeBorderRadius={2}
+        />
+        <Controls />
+        <Background color="#aaa" gap={16} />
+      </ReactFlow>
       </div>
     </div>
   );
