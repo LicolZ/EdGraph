@@ -11,16 +11,23 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet'; 
 import 'reactflow/dist/style.css';
 
-import { createNode, createEdges } from './reactFlowNodesEdges';
+import { createNode, createEdgesFromRelationships } from './reactFlowNodesEdges';
+
+import ButtonNode from './buttonNode';
 
 import './App.css';
 import './index.css';
+
+const nodeTypes = {
+  buttonNode: ButtonNode,
+};
 
 export default function FileUploadComponent() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -40,10 +47,12 @@ export default function FileUploadComponent() {
     .then(response => {
       const topics = response.data.topics;
       const newNodes = topics.map((topic, i) => createNode(topic, i));
-      let newElements = [...newNodes];
-      newElements = createEdges(newNodes, newElements);
+      console.log("relationships:", response.data.relationships);
+      console.log("newNodes:", newNodes);
+      const newEdges = createEdgesFromRelationships(response.data.relationships, newNodes);
+      console.log("newEdges:", newEdges);
       setNodes(newNodes);
-      setEdges(newElements);
+      setEdges(newEdges);
     })
     .finally(() => setLoading(false));
   };
@@ -81,8 +90,9 @@ export default function FileUploadComponent() {
         <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
         <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
       </div>
-      <div id="topicsContainer">
-        <ReactFlow 
+      <div id="topicsContainer">  
+        <ReactFlow
+          nodeTypes={nodeTypes} 
           nodes={nodes} 
           edges={edges}
           onConnect={onConnect}

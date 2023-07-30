@@ -18,10 +18,17 @@ class ProcessFileView(APIView):
             print(f'Received file with name {file.name}')
             # Save the file temporarily
             file_path = default_storage.save('temp.pdf', file)
-            # Process the file and get the topics
+            # Process the file
+
             process_file = ProcessFile(file_path)
+
+            # get topics
             topics = process_file.extract_topics()
-            # Return the topics in a JSON response
-            return JsonResponse({"topics": topics})
+
+            # get relationships between topics
+            relationships = process_file.fetch_topic_relationships(topics)
+
+            # Return the topics and relationships in a JSON response
+            return JsonResponse({"topics": topics, "relationships": relationships})
         else:
             return Response({'error': 'No file provided'}, status=400)
