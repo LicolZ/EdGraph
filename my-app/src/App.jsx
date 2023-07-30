@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet'; 
+import React, { useCallback, useState, useEffect } from 'react';
+import ReactFlow, {
+  MiniMap,
+  Controls,
+  Background,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+} from 'reactflow';
 import axios from 'axios';
-import ReactFlow, { MiniMap, Controls, Background } from 'reactflow';
+import { Helmet } from 'react-helmet'; 
 import 'reactflow/dist/style.css';
 
 import './App.css';
@@ -9,70 +16,62 @@ import './index.css';
 
 const nodesPerRow = 5; // number of nodes in one row
 
-function createNode(topic, index, totalNodes) {
+function createNode(topic, index) {
   const rowIndex = Math.floor(index / nodesPerRow);
   const columnIndex = index % nodesPerRow;
-
-  const nodeGap = 50; // Distance between nodes
-  
-  // calculate total width and height based on node count and gap
-  const totalWidth = (nodesPerRow - 1) * nodeGap;
-  const totalHeight = (Math.ceil(totalNodes / nodesPerRow) - 1) * nodeGap;
+  const nodeGap = 500;
 
   return {
     id: `node-${index}`,
     type: 'default',
     data: { label: topic },
-    position: { 
-      x: columnIndex * nodeGap - totalWidth / 2, 
-      y: rowIndex * nodeGap - totalHeight / 2 
-    },
+    position: { x: columnIndex * nodeGap, y: rowIndex * nodeGap },
   };
 }
 
+const connectionExists = (source, target, elements) => {
+  return elements.some(element => {
+    return (
+      (element.source === source && element.target === target) ||
+      (element.source === target && element.target === source)
+    );
+  });
+};
 
-function FileUploadComponent() {
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [elements, setElements] = useState([]);
-
-  const connectionExists = (source, target, elements) => {
-    return elements.some(element => {
-      return (
-        (element.source === source && element.target === target) ||
-        (element.source === target && element.target === source)
-      );
-    });
-  };
-
-  const createEdges = (newNodes, newElements) => {
-    console.log("Creating edges for nodes: ", newNodes);
-    for (let i = 0; i < newNodes.length - 1; i++) {
-      for (let j = i + 1; j < newNodes.length; j++) {
-        const source = newNodes[i].id;
-        const target = newNodes[j].id;
-        if (!connectionExists(source, target, newElements)) {
-          newElements.push({
-            id: `edge-${source}-${target}`,
-            source: source,
-            target: target,
-            animated: true,
-          });
-        }
+const createEdges = (newNodes, newElements) => {
+  for (let i = 0; i < newNodes.length - 1; i++) {
+    for (let j = i + 1; j < newNodes.length; j++) {
+      const source = newNodes[i].id;
+      const target = newNodes[j].id;
+      if (!connectionExists(source, target, newElements)) {
+        newElements.push({
+          id: `edge-${source}-${target}`,
+          source: source,
+          target: target,
+          animated: true,
+        });
       }
     }
-    console.log("New elements with edges: ", newElements);
-    return newElements;
-  };
+  }
+  return newElements;
+};
+
+export default function FileUploadComponent() {
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  const onConnect = useCallback(
+    (params) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
 
   const submitFile = () => {
-    
     setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
-  
     const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-    
     axios.post(`${baseUrl}/process/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -80,21 +79,15 @@ function FileUploadComponent() {
     })
     .then(response => {
       const topics = response.data.topics;
-      const newNodes = topics.map((topic, i) => createNode(topic, i, topics.length));
+      const newNodes = topics.map((topic, i) => createNode(topic, i));
       let newElements = [...newNodes];
-  
       newElements = createEdges(newNodes, newElements);
-      setElements(newElements);
+      setNodes(newNodes);
+      setEdges(newElements);
     })
-    
     .finally(() => setLoading(false));
   };
-  
-  // UseEffect to track changes in 'elements'
-  useEffect(() => {
-    console.log('Elements state updated: ', elements);
-  }, [elements]);
-  
+
   useEffect(() => {
     const handleResize = () => {
       const title = document.getElementById("upload-text");
@@ -129,23 +122,22 @@ function FileUploadComponent() {
         <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
       </div>
       <div id="topicsContainer">
-      <ReactFlow 
-        elements={elements} 
-        style={{ width: '100%', height: '100%' }}
-        proOptions={{ hideAttribution: true }}
-      >
-        <MiniMap
-          nodeStrokeColor={(n) => '#fff'}
-          nodeColor={(n) => '#1A192B'}
-          nodeBorderRadius={2}
-        />
-        <Controls />
-        <Background color="#aaa" gap={16} />
-      </ReactFlow>
-
+        <ReactFlow 
+          nodes={nodes} 
+          edges={edges}
+          onConnect={onConnect}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+        >
+          <MiniMap
+            nodeStrokeColor={(n) => '#FFF'}
+            nodeColor={(n) => '#1A192B'}
+            nodeBorderRadius={2}
+          />
+          <Controls />
+          <Background color="#aaa" gap={16} />
+        </ReactFlow>
       </div>
     </div>
   );
 }
-
-export default FileUploadComponent;
