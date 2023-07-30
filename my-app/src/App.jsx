@@ -121,7 +121,7 @@ export default function FileUploadComponent() {
         <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
         <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
       </div>
-      <div id="topicsContainer" style={{ width: '100vw', height: '100vh' }}>
+      <div id="topicsContainer">
         <ReactFlow 
           nodes={nodes} 
           edges={edges}
