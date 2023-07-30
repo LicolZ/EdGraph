@@ -23,7 +23,7 @@ h1 {
 
 #topicsContainer {
   width: 100%;
-  height: 520px; /* Adjust this as needed */
+  height: 550px; /* Adjust this as needed */
   display: flex;
   justify-content: center;
 }

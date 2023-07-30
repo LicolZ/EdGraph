@@ -19,29 +19,3 @@
   #uploadButton:hover {
     background-color: #444444;
   }
-  
-  /* Styling for nodes in react-flow */
-  .react-flow__node-default {
-    background-color: #4CAF50; /* Sets the node background color */
-    border-radius: 5px; /* Gives nodes rounded corners */
-    width: 500px; /* Sets the width of the nodes */
-    height: 50px; /* Sets the height of the nodes */
-    
-  }
-  
-  .react-flow__node-default .react-flow__node-data {
-    color: #333376; /* Sets the label color */
-    font-size: 18px; /* Sets the label font size */
-  }
-  
-.flow {
-    display: flex;    /* This will make the element a flex container */
-    justify-content: center; /* This will center the child elements horizontally */
-    align-items: center;  /* This will center the child elements vertically */
-    width: 100%;  /* set to 100% of the parent container */
-    height: 80vh;  /* set to 80% of the viewport height */
-  }  
-  
-  .react-flow__background {
-    opacity: 1; /* or set to 0 to completely hide it */
-  }

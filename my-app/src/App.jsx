@@ -19,7 +19,7 @@ const nodesPerRow = 5; // number of nodes in one row
 function createNode(topic, index) {
   const rowIndex = Math.floor(index / nodesPerRow);
   const columnIndex = index % nodesPerRow;
-  const nodeGap = 500;
+  const nodeGap = 500; // Distance between nodes
 
   return {
     id: `node-${index}`,
@@ -121,7 +121,7 @@ export default function FileUploadComponent() {
         <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
         <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
       </div>
-      <div id="topicsContainer">
+      <div id="topicsContainer" style={{ width: '100vw', height: '100vh' }}>
         <ReactFlow 
           nodes={nodes} 
           edges={edges}
