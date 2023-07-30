@@ -15,6 +15,7 @@ class ProcessFileView(APIView):
     def post(self, request, *args, **kwargs):
         file = request.data.get('file')
         if file:
+            print(f'Received file with name {file.name}')
             # Save the file temporarily
             file_path = default_storage.save('temp.pdf', file)
             # Process the file and get the topics
