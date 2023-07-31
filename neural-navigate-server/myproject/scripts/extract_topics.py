@@ -67,7 +67,7 @@ class ProcessFile:
                 Note that a topic can have multiple independent prerequisites. 
             """,
             max_tokens=400,
-            temperature=0.5)
+            temperature=0.2)
 
         relationships_text = response.choices[0].text.strip()
 
