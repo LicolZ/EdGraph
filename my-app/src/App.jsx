@@ -16,6 +16,11 @@ import { createNode, createEdgesFromRelationships } from './reactFlowNodesEdges'
 
 import ButtonNode from './buttonNode';
 
+// import sign-in components
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import SignIn from './SignIn';
+import useAuth from './useAuth';
+
 import './App.css';
 import './index.css';
 
@@ -28,7 +33,7 @@ export default function FileUploadComponent() {
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  
+  // const { isAuthenticated, user } = useAuth();
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -80,6 +85,10 @@ export default function FileUploadComponent() {
     };
   }, []);
 
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/signin" replace />;
+  // }
+
   return (
     <div className="container">
       <Helmet>
@@ -112,3 +121,14 @@ export default function FileUploadComponent() {
     </div>
   );
 }
+
+// export default function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route path="/signin" element={ <SignIn /> } />
+//         <Route path="/" element={ <FileUploadComponent /> } />
+//       </Routes>
+//     </Router>
+//   );
+// }

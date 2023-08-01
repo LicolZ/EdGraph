@@ -9,7 +9,7 @@ const ButtonNode = ({ data }) => {
   }
 
   return (
-    <div style={{ background: "#1A192B", border: '1px solid #FFF', borderRadius: '2px', padding: '10px' }}>
+    <div style={{ background: "#1A192B", border: '1px solid #FFF', borderRadius: '2px', padding: '0px', display: 'flex', alignItems: 'center' }}> {/* Changed padding to '0px' and added 'display: flex' and 'align-items: center' */}
       <Handle
         type="target"
         position="left"
