@@ -27,19 +27,18 @@
     background-color: #1A192B;
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 7px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: 12px;
+    margin: 5px 8px;
     cursor: pointer;
     transition-duration: 0.4s;
-    border-radius: 12px;
+    border-radius: 5px;
   }
   
   #loginButton:hover {
-    background-color: white;
-    color: black;
+    background-color: #444444;
   }
   
