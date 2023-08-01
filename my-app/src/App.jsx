@@ -91,38 +91,42 @@ export default function FileUploadComponent() {
   }, []);
 
   return (
-    <div className="container">
-      <div style={{ textAlign: 'right' }}>
-        <Button id="loginButton" onClick={handleOpen}>Login</Button>
+    <>
+      <div className="container">
+        <div style={{ textAlign: 'right' }}>
+          <div id="loginButton" onClick={handleOpen}>Login</div>
+        </div>
+        <Helmet>
+          <title>NeuralNavigate</title>
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet" />
+        </Helmet>
+        <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
+        <div className="upload-section">
+          <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
+          <button id="uploadButton" onClick={submitFile}>
+            {loading ? "Loading..." : "Generate Graph"}
+          </button>
+        </div>
+        <div id="topicsContainer">
+          <ReactFlow
+            nodeTypes={nodeTypes} 
+            nodes={nodes} 
+            edges={edges}
+            onConnect={onConnect}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+          >
+            <MiniMap
+              nodeStrokeColor={(n) => '#FFF'}
+              nodeColor={(n) => '#1A192B'}
+              nodeBorderRadius={2}
+            />
+            <Controls />
+            <Background color="#aaa" gap={16} />
+          </ReactFlow>
+        </div>
       </div>
-      <Helmet>
-        <title>NeuralNavigate</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet" />
-      </Helmet>
-      <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
-      <div className="upload-section">
-        <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
-        <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
-      </div>
-      <div id="topicsContainer">   
-        <ReactFlow
-          nodeTypes={nodeTypes} 
-          nodes={nodes} 
-          edges={edges}
-          onConnect={onConnect}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-        >
-          <MiniMap
-            nodeStrokeColor={(n) => '#FFF'}
-            nodeColor={(n) => '#1A192B'}
-            nodeBorderRadius={2}
-          />
-          <Controls />
-          <Background color="#aaa" gap={16} />
-        </ReactFlow>
-      </div>
-
+    
       {/* Modal for SignIn */}
       <Modal
         show={openModal}
@@ -140,7 +144,7 @@ export default function FileUploadComponent() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </>
   );
 }
 
