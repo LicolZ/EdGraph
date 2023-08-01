@@ -11,16 +11,14 @@ import ReactFlow, {
 import axios from 'axios';
 import { Helmet } from 'react-helmet'; 
 import 'reactflow/dist/style.css';
+import { Modal, Button } from 'react-bootstrap'; // import React Bootstrap's Modal and Button
 
 import { createNode, createEdgesFromRelationships } from './reactFlowNodesEdges';
 
 import ButtonNode from './buttonNode';
 
 // import sign-in components
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import SignIn from './SignIn';
-import useAuth from './useAuth';
-
+import SignIn from './user/SignIn';
 import './App.css';
 import './index.css';
 
@@ -33,7 +31,7 @@ export default function FileUploadComponent() {
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  // const { isAuthenticated, user } = useAuth();
+  const [openModal, setOpenModal] = useState(false); // State for opening and closing modal
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -53,14 +51,21 @@ export default function FileUploadComponent() {
     .then(response => {
       const topics = response.data.topics;
       const newNodes = topics.map((topic, i) => createNode(topic, i));
-      console.log("relationships:", response.data.relationships);
-      console.log("newNodes:", newNodes);
       const newEdges = createEdgesFromRelationships(response.data.relationships, newNodes);
-      console.log("newEdges:", newEdges);
       setNodes(newNodes);
       setEdges(newEdges);
     })
     .finally(() => setLoading(false));
+  };
+
+  // Function to handle opening modal
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  // Function to handle closing modal
+  const handleClose = () => {
+    setOpenModal(false);
   };
 
   useEffect(() => {
@@ -85,12 +90,11 @@ export default function FileUploadComponent() {
     };
   }, []);
 
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/signin" replace />;
-  // }
-
   return (
     <div className="container">
+      <div style={{ textAlign: 'right' }}>
+        <Button id="loginButton" onClick={handleOpen}>Login</Button>
+      </div>
       <Helmet>
         <title>NeuralNavigate</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet" />
@@ -100,7 +104,7 @@ export default function FileUploadComponent() {
         <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
         <button id="uploadButton" onClick={submitFile}>{loading ? "Loading..." : "Generate Graph"}</button>
       </div>
-      <div id="topicsContainer">  
+      <div id="topicsContainer">   
         <ReactFlow
           nodeTypes={nodeTypes} 
           nodes={nodes} 
@@ -118,17 +122,30 @@ export default function FileUploadComponent() {
           <Background color="#aaa" gap={16} />
         </ReactFlow>
       </div>
+
+      {/* Modal for SignIn */}
+      <Modal
+        show={openModal}
+        onHide={handleClose}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Sign In</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <SignIn />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
 
-// export default function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/signin" element={ <SignIn /> } />
-//         <Route path="/" element={ <FileUploadComponent /> } />
-//       </Routes>
-//     </Router>
-//   );
-// }
+export function App() {
+  return (
+    <FileUploadComponent />
+  );
+}

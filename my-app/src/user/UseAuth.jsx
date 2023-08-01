@@ -1,8 +1,8 @@
-// useAuth.js
+// UseAuth.jsx
 import { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 
-function useAuth() {
+export default function UseAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -20,5 +20,3 @@ function useAuth() {
 
   return { isAuthenticated, user };
 }
-
-export default useAuth;
