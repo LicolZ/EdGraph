@@ -24,35 +24,33 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #1A192B;
-    color: white;
+    background-color: transparent; /* no background */
+    color: black; /* color of X*/
     border: none;
     padding: 7px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px;
+    font-size: 17px; /* increase the size of X */
     margin: 5px 8px;
     cursor: pointer;
-    transition-duration: 0.4s;
-    border-radius: 5px;
   }
   
   #loginButton:hover {
-    background-color: #444444;
+    color: darkgrey; /* On hover, X becomes dark grey */
   }
-  
+
 /* modal styling */
 .modal {
   position: fixed;
-  top: 55%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   background-color: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* modal sits on top of other elements */
   display: none; /* by default, modal is hidden */
@@ -65,9 +63,84 @@
 .modal-header,
 .modal-footer {
   padding: 10px;
-  border-bottom: 0.1px solid #dddddd;
 }
 
+.modal-title {
+  font-family: 'Inter', sans-serif;  
+  font-size: 25px; /* replace with the size you want */
+  text-align: center; /* this will center the text */
+  color: #070442;
+  padding-top: 25px;
+  width: 100%; /* ensures the text alignment property above works correctly */
+}
+
+
 .modal-body {
-  padding: 45px;
+  padding-top: 15px;
+  padding-bottom: 50px;
+  padding-left: 17px;
+  padding-right: 17px;
+}
+
+/* Authentication.css */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-divider {
+  background-color: #ccc;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.signin-form,
+.signup-form {
+  width: 100%;
+  height: 135px
+}
+
+.form-control {
+  width: 95.6%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.signin-button,
+.signup-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #1A192B; /* blue */
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 0;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.signin-button:hover,
+.signup-button:hover {
+  background-color: #444444; /* blue */
+  color: white;
+  border: .5px solid #444444;
+}
+
+.signin-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.forgot-password,
+.signup {
+  color: rgb(117, 117, 117);
+  text-decoration: none;
+  padding-top: 30px;
 }

@@ -17,10 +17,12 @@ import { createNode, createEdgesFromRelationships } from './reactFlowNodesEdges'
 
 import ButtonNode from './buttonNode';
 
-// import sign-in components
-import SignIn from './user/SignIn';
+// import SignIn/SignUp components
+import Authentication from './user/Authentication';
 import './App.css';
 import './index.css';
+
+
 
 const nodeTypes = {
   buttonNode: ButtonNode,
@@ -94,7 +96,7 @@ export default function FileUploadComponent() {
     <>
       <div className="container">
         <div style={{ textAlign: 'right' }}>
-          <div id="loginButton" onClick={handleOpen}>Login</div>
+          <div id="loginButton" onClick={handleOpen}>Log In </div>
         </div>
         <Helmet>
           <title>NeuralNavigate</title>
@@ -127,23 +129,22 @@ export default function FileUploadComponent() {
         </div>
       </div>
     
-      {/* Modal for SignIn */}
+      {/* modal for SignIn/SignUp */}
       <Modal
         show={openModal}
         onHide={handleClose}
+        className="modal"
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Sign In</Modal.Title>
+        <button id="loginButton" onClick={handleClose}>X</button>
+        <Modal.Header>
+          <Modal.Title className="modal-title">Neural Navigate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <SignIn />
+          <Authentication />
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
+
+
     </>
   );
 }
