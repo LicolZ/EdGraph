@@ -1,5 +1,5 @@
 // App.jsx
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -11,7 +11,7 @@ import ReactFlow, {
 import axios from 'axios';
 import { Helmet } from 'react-helmet'; 
 import 'reactflow/dist/style.css';
-import { Modal, Button } from 'react-bootstrap'; // import React Bootstrap's Modal and Button
+import { Modal } from 'react-bootstrap'; // import React Bootstrap's Modal and Button
 
 import { createNode, createEdgesFromRelationships } from './react-flow/reactFlowNodesEdges';
 
@@ -21,7 +21,6 @@ import ButtonNode from './react-flow/buttonNode';
 import Authentication from './user/Authentication';
 import './App.css';
 import './index.css';
-
 
 
 const nodeTypes = {
@@ -60,12 +59,12 @@ export default function FileUploadComponent() {
     .finally(() => setLoading(false));
   };
 
-  // Function to handle opening modal
+  // function to handle opening modal
   const handleOpen = () => {
     setOpenModal(true);
   };
 
-  // Function to handle closing modal
+  // function to handle closing modal
   const handleClose = () => {
     setOpenModal(false);
   };

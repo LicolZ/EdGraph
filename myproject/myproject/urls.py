@@ -17,9 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myproject.views import ProcessFileView
-from myproject.views import HealthCheckFileView
+# from myproject.views import HealthCheckFileView
 
 urlpatterns = [
     path('process/', ProcessFileView.as_view(), name='process_file'),
-    path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
+    # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]

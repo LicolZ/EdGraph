@@ -37,11 +37,11 @@ class ProcessFileView(APIView):
         else:
             return Response({'error': 'No file provided'}, status=400)
         
-class HealthCheckFileView(APIView):
-    parser_class = (FileUploadParser)
+# class HealthCheckFileView(APIView):
+#     parser_class = (FileUploadParser)
 
-    def post(self, request, *args, **kwargs):
-        print("hello world version 1.0!")
+#     def post(self, request, *args, **kwargs):
+#         print("hello world version 1.0!")
 
-        return JsonResponse({"hello": "world"})
+#         return JsonResponse({"hello": "world"})
         
