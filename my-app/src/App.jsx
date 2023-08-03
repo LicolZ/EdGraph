@@ -70,33 +70,11 @@ export default function FileUploadComponent() {
     setOpenModal(false);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      const title = document.getElementById("upload-text");
-      if (title) {
-        const windowWidth = window.innerWidth;
-        if (windowWidth < 700) {
-          title.style.fontSize = "16px";
-        } else if (windowWidth < 1000) {
-          title.style.fontSize = "22px";
-        } else {
-          title.style.fontSize = "30px";
-        }
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <>
       <div className="container">
         <div style={{ textAlign: 'right' }}>
-          <div id="loginButton" onClick={handleOpen}>Log In </div>
+          <div id="loginButton" onClick={handleOpen}>Sign In </div>
         </div>
         <Helmet>
           <title>NeuralNavigate</title>
@@ -143,8 +121,6 @@ export default function FileUploadComponent() {
           <Authentication />
         </Modal.Body>
       </Modal>
-
-
     </>
   );
 }
@@ -154,3 +130,5 @@ export function App() {
     <FileUploadComponent />
   );
 }
+
+

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function SignIn() {
+export default function SignIn({switchForm}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
@@ -14,7 +14,7 @@ export default function SignIn() {
       password,
     });
     // TODO: implement handling of the response
-    // need to store the token and set the user as authenticated in  app state
+    // need to store the token and set the user as authenticated in app state
   };
 
   return (
@@ -40,9 +40,9 @@ export default function SignIn() {
         <a href="/forgot-password" className="forgot-password">
           Forgot Password?
         </a>
-        <a href="/signup" className="signup">
-          Sign Up
-        </a>
+        <span onClick={() => switchForm(true)} className="signup"> {/* use switchForm when Sign Up is clicked */}
+            Sign Up
+        </span>
       </div>
     </form>
   );
