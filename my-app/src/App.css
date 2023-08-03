@@ -1,3 +1,4 @@
+/* Header Components */
 .upload-section {
     display: flex;
     flex-direction: column;
@@ -6,7 +7,7 @@
   }
 
   #upload-text {
-    font-size: 2vw; /* Adjust as needed */
+    font-size: 2vw;
   }
   
   @media (max-width: 700px) {
@@ -26,9 +27,8 @@
       font-size: 30px;
     }
   }
-
   
-  #uploadButton {
+  #generateGraphButton {
     width: 155%;
     padding: 10px;
     background-color: #1A192B;
@@ -39,7 +39,7 @@
     transition: background-color 0.3s;
   }
   
-  #uploadButton:hover {
+  #generateGraphButton:hover {
     background-color: #444444;
   }
 
@@ -63,7 +63,8 @@
     color: darkgrey; /* On hover, X becomes dark grey */
   }
 
-/* modal styling */
+
+/* SignIn/SignUp Modal */
 .modal {
   position: fixed;
   top: 60%;
@@ -104,6 +105,7 @@
   padding-left: 17px;
   padding-right: 17px;
 }
+
 
 /* Authentication.css */
 .auth-container {
@@ -167,4 +169,23 @@
   text-decoration: none;
   padding-top: 30px;
   cursor: pointer;
+}
+
+
+/* React Flow Components */ 
+.buttonNodeButton {
+  background: transparent;
+  border: none;
+  color: #FFF;
+  border-radius: 0px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  padding: 10px; /* padding moved from div to button */
+  box-sizing: border-box;
+}
+
+.buttonNodeButton:hover {
+  background-color: #444444;
 }

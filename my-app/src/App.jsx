@@ -13,9 +13,9 @@ import { Helmet } from 'react-helmet';
 import 'reactflow/dist/style.css';
 import { Modal, Button } from 'react-bootstrap'; // import React Bootstrap's Modal and Button
 
-import { createNode, createEdgesFromRelationships } from './reactFlowNodesEdges';
+import { createNode, createEdgesFromRelationships } from './react-flow/reactFlowNodesEdges';
 
-import ButtonNode from './buttonNode';
+import ButtonNode from './react-flow/buttonNode';
 
 // import SignIn/SignUp components
 import Authentication from './user/Authentication';
@@ -83,7 +83,7 @@ export default function FileUploadComponent() {
         <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
         <div className="upload-section">
           <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
-          <button id="uploadButton" onClick={submitFile}>
+          <button id="generateGraphButton" onClick={submitFile}>
             {loading ? "Loading..." : "Generate Graph"}
           </button>
         </div>

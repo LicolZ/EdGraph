@@ -1,6 +1,6 @@
 import React from 'react';
 import { Handle } from 'reactflow';
-import './buttonNode.css';
+import './../App.css';
 
 const ButtonNode = ({ data }) => {
   const handleClick = () => {
