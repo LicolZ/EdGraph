@@ -15,11 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from myproject.views import signup, signin
+
 from myproject.views import ProcessFileView
+
 # from myproject.views import HealthCheckFileView
+
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('process/', ProcessFileView.as_view(), name='process_file'),
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),  # DRF's built-in views
+    path('api/token-auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('api/signup/', signup, name='signup'),
+    path('api/signin/', signin, name='signin'),
     # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]

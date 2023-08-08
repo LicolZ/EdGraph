@@ -29,19 +29,14 @@ class ProcessFile:
         return words
 
     def extract_topics(self):
-        print("entering extract_topics")
         text = self.extract_text_from_pdf()
-        print("extracted text from pdf")
         sentences = sent_tokenize(text)
-        print("sent tokenized")
 
         topics = set()
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        print("openai key gen")
 
         for sentence in sentences[0:1]:
             preprocessed_string = ' '.join(self.preprocess_text(sentence))
-            print("preprocessed text")
             response = openai.Completion.create(
                 model="text-davinci-003",
                 prompt=f"Given the following sentence, extract all the topics related to Machine Learning and Artificial Intelligence. {preprocessed_string}",
@@ -50,12 +45,10 @@ class ProcessFile:
 
             response_text = response.choices[0].text.strip().lower()
             extracted_topics = re.split(' - |\n', re.sub(r'\d+\.\s*', '', response_text))
-            print("finished extracting topics")
             # Remove 'abstract ' from the start of each topic and '-' at the beginning
             processed_topics = [topic.lstrip('- ').replace('abstract ', '') for topic in extracted_topics if topic and not topic.isspace()]
 
             topics.update(processed_topics)
-            print("updated topics")
         return list(topics)
     
     def fetch_topic_relationships(self, topics):

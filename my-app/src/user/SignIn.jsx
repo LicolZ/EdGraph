@@ -8,14 +8,24 @@ export default function SignIn({switchForm}) {
   const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
   const submitForm = async (e) => {
-    e.preventDefault(); // to prevent form from submitting and page refresh
-    const response = await axios.post(`${baseUrl}/api/signin`, {
-      email,
-      password,
-    });
-    // TODO: implement handling of the response
-    // need to store the token and set the user as authenticated in app state
-  };
+    e.preventDefault();
+    try {
+        const response = await axios.post(`${baseUrl}/api/signin/`, {
+            email,
+            password,
+        });
+        const token = response.data.token;
+        if (token) {
+            // store the token somewhere, e.g., in local storage or context
+            localStorage.setItem('token', token);
+        }
+        // redirect or perform some action on successful login
+    } catch (error) {
+        // handle error
+        console.error("Error signing in", error);
+    }
+};
+
 
   return (
     <form onSubmit={submitForm} className="signin-form">
@@ -47,3 +57,4 @@ export default function SignIn({switchForm}) {
     </form>
   );
 }
+
