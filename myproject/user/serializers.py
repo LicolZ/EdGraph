@@ -1,16 +1,16 @@
 # serializers.py
 
-from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import CustomUser  
 
 class UserSerializer(serializers.ModelSerializer):
     
-    password = serializers.CharField(write_only=True) # Add this line to handle password separately
+    password = serializers.CharField(write_only=True) 
 
     class Meta:
-        model = User
+        model = CustomUser 
         fields = ('id', 'email', 'password')
-
+    
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)

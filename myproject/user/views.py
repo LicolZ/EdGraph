@@ -15,6 +15,7 @@ from rest_framework import status, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework import status
+import datetime
 
 
 from user.serializers import UserSerializer
@@ -61,6 +62,10 @@ class SigninView(APIView):
         user = authenticate(username=username, password=password)
         
         if user:
+            # Update last_login
+            user.last_login = datetime.datetime.now()
+            user.save()
+
             refresh = RefreshToken.for_user(user)
             token = str(refresh.access_token)
             return JsonResponse({"token": token}, status=status.HTTP_200_OK)
