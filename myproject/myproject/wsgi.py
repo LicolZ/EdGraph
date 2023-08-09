@@ -1,6 +1,9 @@
 """
 WSGI config for myproject project.
 
+entry point for WSGI-compatible web servers to serve the Django project. 
+ ---> Crucial for deploying to production
+
 It exposes the WSGI callable as a module-level variable named ``application``.
 
 For more information on this file, see

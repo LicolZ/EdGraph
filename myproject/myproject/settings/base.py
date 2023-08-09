@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "storages",
     "rest_framework_simplejwt",
+    "user", # custom user model resides in the "users" app
 ]
 
 REST_FRAMEWORK = {
@@ -52,17 +53,11 @@ SIMPLE_JWT = {
 
     'ALLOWED_ALGORITHMS': ('HS256',),
 
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=20),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
-
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
 
     'UPDATE_LAST_LOGIN': False,
 
-    'ALGORITHM': 'HS256',
-    'VERIFYING_KEY': None,
-    'SIGNING_KEY': SECRET_KEY,
     'VERIFY_SIGNATURE': True,
     'ISSUER': None,
     'USER_ID_FIELD': 'id',
@@ -74,6 +69,8 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
+# Point to custom user model
+AUTH_USER_MODEL = 'user.CustomUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

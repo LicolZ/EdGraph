@@ -1,5 +1,5 @@
 """
-URL configuration for myproject project.
+root URL configuration for myproject project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -18,13 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from myproject.views import signup, signin
-
-from myproject.views import ProcessFileView
-
-# from myproject.views import HealthCheckFileView
-
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from user.views import SignupView, SigninView, ProcessFileView
 
 urlpatterns = [
     path('process/', ProcessFileView.as_view(), name='process_file'),
@@ -32,8 +26,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),  # DRF's built-in views
     path('api/token-auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    path('api/signup/', signup, name='signup'),
-    path('api/signin/', signin, name='signin'),
+    path('api/signup/', SignupView.as_view(), name='signup'),
+    path('api/signin/', SigninView.as_view(), name='signin'),
     # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]
