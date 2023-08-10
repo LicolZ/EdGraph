@@ -397,7 +397,8 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 --
 
 COPY public.user_customuser (id, password, last_login, is_superuser, email, is_active, is_staff) FROM stdin;
-5	pbkdf2_sha256$600000$lODf4zANq5x94ch4lKUwls$WUxrjk3HLvofYBDEM7bFxHrWBT4azV0fy1SaN1/GNSo=	\N	f	neolevzion1@gmail.com	t	f
+6	pbkdf2_sha256$600000$lRz8rDcyiaf3mo1jzpDX7W$sOdvMrWl6HUvBgC7GI6ljollvxVz0l3C4NcbrDVZfLk=	\N	f	licol.havaiia@gmail.com	t	f
+5	pbkdf2_sha256$600000$lODf4zANq5x94ch4lKUwls$WUxrjk3HLvofYBDEM7bFxHrWBT4azV0fy1SaN1/GNSo=	2023-08-10 11:12:15.625282-07	f	neolevzion1@gmail.com	t	f
 \.
 
 
@@ -470,7 +471,7 @@ SELECT pg_catalog.setval('public.user_customuser_groups_id_seq', 1, false);
 -- Name: user_customuser_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_customuser_id_seq', 5, true);
+SELECT pg_catalog.setval('public.user_customuser_id_seq', 6, true);
 
 
 --

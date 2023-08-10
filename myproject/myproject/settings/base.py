@@ -18,6 +18,9 @@ import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Setting STATIC_ROOT for the collectstatic command
+STATIC_ROOT = BASE_DIR / 'collected_static'
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key") 
 
