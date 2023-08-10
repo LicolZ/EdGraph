@@ -136,6 +136,7 @@ STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 CORS_ALLOWED_ORIGINS = [
     "https://neuralnavigate.com",
     "https://www.neuralnavigate.com",
+    "http://localhost:3000",
     # any other domains want to whitelist?
 ]
 

@@ -398,7 +398,7 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 
 COPY public.user_customuser (id, password, last_login, is_superuser, email, is_active, is_staff) FROM stdin;
 3	pbkdf2_sha256$600000$taFpVnz9P34bJPIAVRdIGy$jrG+lSanoN2nMhfFbKqg+zqW10/GrmuKHCqOcKUtT5Y=	\N	f	neolevzion1@gmail.com	t	f
-1	pbkdf2_sha256$600000$Dsu58EBS8Hk6J3gcKpfUsm$bohgGlpX8/dfnzINiotSL+Hfx/UieBuAwY7+wTUwNjU=	2023-08-09 15:11:28.552992-07	f	licol.havaiia@gmail.com	t	f
+1	pbkdf2_sha256$600000$Dsu58EBS8Hk6J3gcKpfUsm$bohgGlpX8/dfnzINiotSL+Hfx/UieBuAwY7+wTUwNjU=	2023-08-09 17:40:30.141276-07	f	licol.havaiia@gmail.com	t	f
 \.
 
 

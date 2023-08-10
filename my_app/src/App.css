@@ -171,6 +171,12 @@
   cursor: pointer;
 }
 
+.signup-error-message {
+  color: red;
+  margin: 10px 0;
+}
+
+
 
 /* React Flow Components */ 
 .buttonNodeButton {
