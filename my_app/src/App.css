@@ -130,7 +130,7 @@
 .form-control {
   width: 95.6%;
   padding: 10px;
-  margin: 10px 0;
+  margin: 9px 0;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
@@ -145,7 +145,7 @@
   text-align: center;
   display: inline-block;
   font-size: 16px;
-  margin: 10px 0;
+  margin: 11px 0;
   transition-duration: 0.4s;
   cursor: pointer;
   border-radius: 4px;
@@ -167,14 +167,16 @@
 .signup {
   color: rgb(117, 117, 117);
   text-decoration: none;
-  padding-top: 30px;
+  padding-top: 16px;
   cursor: pointer;
 }
 
-.signup-error-message {
-  color: red;
-  margin: 10px 0;
+.signup-signin-error-message {
+  color: #C62828;
+  margin: 2px 0;
+  font-size: 12px;
 }
+
 
 
 

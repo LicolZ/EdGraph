@@ -1,12 +1,13 @@
 // SignUp.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
 export default function SignUp({ switchForm }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
   const [error, setError] = useState(null);
+  const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -18,18 +19,18 @@ export default function SignUp({ switchForm }) {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        // Here you can redirect or perform some action on successful sign up
-        // For example: 
-        // history.push('/dashboard');
-      } else if (response.data.error) {
-        setError(response.data.error);
+        // Optionally redirect or perform some other action on successful sign up
+      } else {
+        const errors = Object.values(response.data).flat().join(' ');
+        setError(errors);
       }
     } catch (error) {
-        if (error.response && error.response.data.error) {
-            setError(error.response.data.error);
-        } else {
-            console.error("Error signing up", error);
-        }
+      if (error.response) {
+        const errors = Object.values(error.response.data).flat().join(' ');
+        setError(errors);
+      } else {
+        console.error("Error signing up", error);
+      }
     }
   };
 
@@ -49,9 +50,7 @@ export default function SignUp({ switchForm }) {
         placeholder="Password"
         className="form-control"
       />
-
-      {error && <div className="signup-error-message">{error}</div>}
-      
+      {error && <div className="signup-signin-error-message">{error}</div>}
       <button type="submit" className="signup-button">
         Sign Up
       </button>
@@ -66,4 +65,3 @@ export default function SignUp({ switchForm }) {
     </form>
   );
 }
-

@@ -1,31 +1,37 @@
 // SignIn.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
 export default function SignIn({switchForm}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post(`${baseUrl}/api/signin/`, {
-            email,
-            password,
-        });
-        const token = response.data.token;
-        if (token) {
-            // store the token somewhere, e.g., in local storage or context
-            localStorage.setItem('token', token);
-        }
-        // redirect or perform some action on successful login
+      const response = await axios.post(`${baseUrl}/api/signin/`, {
+        email,
+        password,
+      });
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem('token', token);
+      } else {
+        const errors = Object.values(response.data).flat().join(' ');
+        setError(errors);
+      }
     } catch (error) {
-        // handle error
+      if (error.response) {
+        const errors = Object.values(error.response.data).flat().join(' ');
+        setError(errors);
+      } else {
         console.error("Error signing in", error);
+      }
     }
   };
-
 
   return (
     <form onSubmit={submitForm} className="signin-form">
@@ -43,6 +49,7 @@ export default function SignIn({switchForm}) {
         placeholder="Password"
         className="form-control"
       />
+      {error && <div className="signup-signin-error-message">{error}</div>}
       <button type="submit" className="signin-button">
         Sign In
       </button>
@@ -50,11 +57,10 @@ export default function SignIn({switchForm}) {
         <a href="/forgot-password" className="forgot-password">
           Forgot Password?
         </a>
-        <span onClick={() => switchForm(true)} className="signup"> {/* use switchForm when Sign Up is clicked */}
-            Sign Up
+        <span onClick={() => switchForm(true)} className="signup">
+          Sign Up
         </span>
       </div>
     </form>
   );
 }
-

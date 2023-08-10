@@ -17,6 +17,8 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import IntegrityError
 from user.models import CustomUser
+from rest_framework.permissions import AllowAny
+from .serializers import UserSerializer
 
 
 # Local imports
@@ -29,53 +31,54 @@ def generate_token_for_user(user):
     return str(refresh.access_token)
 
 class SignupView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        data = {}
+        print("Inside SignupView post method")  # Add this
+        # # Extract email and password from the request data
         email = request.data.get('email')
-
-        # Check for email uniqueness here first
-        if CustomUser.objects.filter(email=email).exists():
-            data['error'] = "A user is already registered with this e-mail address."
-            return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
-
+        password = request.data.get('password')
+        
+        # Check if either email or password is missing
+        if not email or not password:
+            return JsonResponse({"non_field_errors": ["Missing required fields"]}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            try:
-                user = serializer.save()
-                data['response'] = "Successfully registered a new user."
-                data['email'] = user.email
-                data["token"] = generate_token_for_user(user)
-            except Exception as e:
-                print("hello")
-                data['error'] = str(e)
-                return JsonResponse(data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        else:
-            data['error'] = "Please enter a valid email address."
-            print(serializer.errors)
-
-        return JsonResponse(data)
-
-
+        
+            serializer.save()
+            user = CustomUser.objects.get(email=serializer.validated_data['email'])
+            token = generate_token_for_user(user)
+            return JsonResponse({
+                'response': 'Successfully registered a new user.',
+                'email': user.email,
+                'token': token
+            }, status=status.HTTP_201_CREATED)
+        
+        
+        print("Serializer Errors:", serializer.errors)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SigninView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get('email')
         password = request.data.get('password')
-        user = authenticate(username=username, password=password)
         
+        if not username or not password:
+            return JsonResponse({"non_field_errors": ["Missing required fields"]}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = authenticate(username=username, password=password)
         if user:
             user.last_login = datetime.datetime.now()
             user.save()
             token = generate_token_for_user(user)
             return JsonResponse({"token": token}, status=status.HTTP_200_OK)
         
-        return JsonResponse({"detail": "Invalid login credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return JsonResponse({"non_field_errors": ["Invalid login credentials"]}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class ProcessFileView(APIView):

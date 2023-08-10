@@ -1,28 +1,28 @@
+# serializers.py
 from rest_framework import serializers
 from django.core.validators import validate_email
 from .models import CustomUser  
 
 class UserSerializer(serializers.ModelSerializer):
-    
     password = serializers.CharField(write_only=True) 
 
     class Meta:
         model = CustomUser 
         fields = ('id', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def validate_email(self, value):
-        """
-        This will just validate that the email has the correct format.
-        """
-        # Use Django's built-in email validator.
-        # If the email isn't valid, it'll raise a ValidationError.
+        print("Inside validate_email")  # Check if this is printed
         validate_email(value)
+        exists_query = CustomUser.objects.filter(email=value)
+        if self.instance:
+            exists_query = exists_query.exclude(id=self.instance.id)
+        if exists_query.exists():
+            raise serializers.ValidationError("A user is already registered with this e-mail address")
         return value
-    
+
     def create(self, validated_data):
-        password = validated_data.pop('password', None)
-        instance = self.Meta.model(**validated_data)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
-        return instance
+        user = super(UserSerializer, self).create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
