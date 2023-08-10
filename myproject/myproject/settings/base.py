@@ -103,17 +103,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "myproject.wsgi.application"
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'neural_navigate_users',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password',  # haven't set this yet
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+# Database defined in child configurations (development.py and production.py)
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",},
@@ -143,7 +133,11 @@ AWS_LOCATION = 'static'
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 
 # CORS
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    "https://neuralnavigate.com",
+    "https://www.neuralnavigate.com",
+    # any other domains want to whitelist?
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
