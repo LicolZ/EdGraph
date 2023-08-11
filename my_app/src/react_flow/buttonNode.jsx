@@ -1,6 +1,9 @@
+// NeuralNavivate/my_app/src/react-flow/buttonNode.jsx
+
 import React from 'react';
 import { Handle } from 'reactflow';
-import '../App.css';
+import '../ReactFlowComponent.css';
+
 
 const ButtonNode = ({ data }) => {
   const handleClick = () => {

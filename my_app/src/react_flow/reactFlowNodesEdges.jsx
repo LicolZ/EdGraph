@@ -1,4 +1,4 @@
-// reactFlowNodesEdges.jsx
+// NeuralNavivate/my_app/src/react-flow/reactFlowNodesEdges.jsx
 
 let edgeIdCounter = 0;
 

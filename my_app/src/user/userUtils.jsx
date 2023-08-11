@@ -1,6 +1,19 @@
+// NeuralNavivate/my_app/src/user/userUtils.jsx
+
 import React from 'react';
 
-export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown) => {
+
+export const signOut = (setUser) => {
+    // Remove token and user email from local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userEmail');
+    // Reset the user state
+    setUser(null);
+    // Optionally: Inform the backend to invalidate the token (if needed)
+    // You may need to make an axios request here.
+  };
+
+export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut) => {
     if (user && user.email) {
       const displayEmail = user.email.split('@')[0];
       return (
@@ -15,7 +28,7 @@ export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown)
                 <div className="dropdown-items">
                   <button onClick={() => { /* go to My Profile */ }}>My Profile</button>
                   <button onClick={() => { /* go to Saved Graphs */ }}>Saved Graphs</button>
-                  <button onClick={() => { /* sign out */ }}>Sign Out</button>
+                  <button onClick={() => { /* sign out */ }}>Sign Out →</button>
                 </div>
               </div>
             </>
@@ -26,6 +39,9 @@ export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown)
       return <div id="loginButton" onClick={handleOpen}>Sign In</div>;
     }
   };
+
+  
+  
 
   
   

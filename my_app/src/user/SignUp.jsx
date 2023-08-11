@@ -1,4 +1,4 @@
-// SignUp.jsx
+// NeuralNavivate/my_app/src/user/SignUp.jsx
 
 import React, { useState } from 'react';
 import axios from 'axios';

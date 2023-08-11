@@ -1,56 +1,35 @@
-// App.jsx
+// NeuralNavivate/my_app/src/App.jsx
+
 import React, { useCallback, useState, useEffect } from 'react';
-import ReactFlow, {
-  MiniMap,
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-} from 'reactflow';
 import axios from 'axios';
+import { Modal } from 'react-bootstrap';
 import { Helmet } from 'react-helmet'; 
-import 'reactflow/dist/style.css';
-import { Modal } from 'react-bootstrap'; // import React Bootstrap's Modal and Button
-
-import { createNode, createEdgesFromRelationships } from './react-flow/reactFlowNodesEdges';
-
-import ButtonNode from './react-flow/buttonNode';
-
-// import SignIn/SignUp components
+import { addEdge, useNodesState, useEdgesState, } from 'reactflow'; // Import addEdge from reactflow
+import ReactFlowComponent from './react_flow/reactFlowComponent';
 import Authentication from './user/Authentication';
+import { renderUserButton } from './user/userUtils';
+import { createNode, createEdgesFromRelationships } from './react_flow/reactFlowNodesEdges';
 import './App.css';
 import './index.css';
-
-// import signed-in user components
-import { renderUserButton } from './user/userUtils';
-
-
-
-const nodeTypes = {
-  buttonNode: ButtonNode,
-};
 
 export default function FileUploadComponent() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [openModal, setOpenModal] = useState(false); // state for opening and closing modal
-  const [user, setUser] = useState(null); // contain user data when user is signed in, null when user is signed out
+  const [openModal, setOpenModal] = useState(false);
+  const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // first useEffect - for updating the user state from local storage on storage events
+  const onConnect = useCallback(
+    (params) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
+
   useEffect(() => {
     const handleStorageChange = () => {
       const userEmail = localStorage.getItem('userEmail');
-      if (userEmail) {
-        console.log("Setting user from storage change:", userEmail);
-        setUser({ email: userEmail });
-      } else {
-        console.log("Resetting user from storage change.");
-        setUser(null);
-      }
+      setUser(userEmail ? { email: userEmail } : null);
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -60,29 +39,27 @@ export default function FileUploadComponent() {
     };
   }, []);
 
-
-  // second useEffect - for setting the initial user state from local storage
   useEffect(() => {
     const userEmail = localStorage.getItem('userEmail');
     if (userEmail) {
-      console.log("Setting initial user:", userEmail);
       setUser({ email: userEmail });
     }
   }, []);
-
-
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
-
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
 
   const submitFile = () => {
+    if (!file) return;
     setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
@@ -102,54 +79,29 @@ export default function FileUploadComponent() {
     .finally(() => setLoading(false));
   };
 
-  // function to handle opening modal
-  const handleOpen = () => {
-    setOpenModal(true);
-  };
-
-  // function to handle closing modal
-  const handleClose = () => {
-    setOpenModal(false);
-  };
-
   return (
-    <>
-      <div className="container">
-        <div style={{ textAlign: 'right' }}>
-          {renderUserButton(user, handleOpen, toggleDropdown, showDropdown)}
-        </div>
-        <Helmet>
-          <title>NeuralNavigate</title>
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet" />
-        </Helmet>
-        <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
-        <div className="upload-section">
-          <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
-          <button id="generateGraphButton" onClick={submitFile}>
-            {loading ? "Loading..." : "Generate Graph"}
-          </button>
-        </div>
-        <div id="topicsContainer">
-          <ReactFlow
-            nodeTypes={nodeTypes} 
-            nodes={nodes} 
-            edges={edges}
-            onConnect={onConnect}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-          >
-            <MiniMap
-              nodeStrokeColor={(n) => '#FFF'}
-              nodeColor={(n) => '#1A192B'}
-              nodeBorderRadius={2}
-            />
-            <Controls />
-            <Background color="#aaa" gap={16} />
-          </ReactFlow>
-        </div>
+    <div className="container">
+      <div style={{ textAlign: 'right' }}>
+        {renderUserButton(user, handleOpen, toggleDropdown, showDropdown)}
       </div>
-    
-      {/* modal for SignIn/SignUp */}
+      <Helmet>
+        <title>NeuralNavigate</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet" />
+      </Helmet>
+      <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
+      <div className="upload-section">
+        <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
+        <button id="generateGraphButton" onClick={submitFile}>
+          {loading ? "Loading..." : "Generate Graph"}
+        </button>
+      </div>
+      <ReactFlowComponent 
+        nodes={nodes}
+        edges={edges}
+        onConnect={onConnect}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+      />
       <Modal
         show={openModal}
         onHide={handleClose}
@@ -163,7 +115,7 @@ export default function FileUploadComponent() {
           <Authentication />
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }
 
@@ -172,5 +124,3 @@ export function App() {
     <FileUploadComponent />
   );
 }
-
-

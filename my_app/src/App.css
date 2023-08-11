@@ -1,3 +1,5 @@
+/* NeuralNavivate/my_app/src/App.css */
+
 /* Header Components */
 .upload-section {
     display: flex;
@@ -189,13 +191,13 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 15px; 
+  font-size: 14px; 
   margin: 5px 8px;
   cursor: pointer;
 }
 
 #usernameDropdownButton:hover {
-  color: darkgrey; /* On hover, X becomes dark grey */
+  color: rgb(150, 150, 150); /* On hover, X becomes dark grey */
 }
 
 .dropdown-content {
@@ -212,7 +214,7 @@
 }
 
 .dropdown-items {
-  margin-top: 70px; 
+  margin-top: 50px; 
 }
 
 .dropdown-content button {
@@ -228,7 +230,7 @@
 }
 
 .dropdown-content button:hover {
-  background-color: #f1f1f1;
+  background-color: #f3f3f3;
 }
 
 #closeDropdownButton {
@@ -246,21 +248,3 @@
   color: darkgrey;
 }
 
-
-/* React Flow Components */ 
-.buttonNodeButton {
-  background: transparent;
-  border: none;
-  color: #FFF;
-  border-radius: 0px;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  padding: 10px; /* padding moved from div to button */
-  box-sizing: border-box;
-}
-
-.buttonNodeButton:hover {
-  background-color: #444444;
-}

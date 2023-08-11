@@ -1,4 +1,4 @@
-// Authentication.jsx
+// NeuralNavivate/my_app/src/user/Authentication.jsx
 import React, { useState } from 'react';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
