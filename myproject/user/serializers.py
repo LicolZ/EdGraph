@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         print("Inside validate_email")  # Check if this is printed
-        validate_email(value)
         exists_query = CustomUser.objects.filter(email=value)
         if self.instance:
             exists_query = exists_query.exclude(id=self.instance.id)

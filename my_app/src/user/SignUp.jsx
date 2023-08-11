@@ -19,6 +19,7 @@ export default function SignUp({ switchForm }) {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userEmail', email);  // save the email
         // Optionally redirect or perform some other action on successful sign up
       } else {
         const errors = Object.values(response.data).flat().join(' ');

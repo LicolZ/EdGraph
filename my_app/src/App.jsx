@@ -1,5 +1,5 @@
 // App.jsx
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -22,6 +22,10 @@ import Authentication from './user/Authentication';
 import './App.css';
 import './index.css';
 
+// import signed-in user components
+import { renderUserButton } from './user/userUtils';
+
+
 
 const nodeTypes = {
   buttonNode: ButtonNode,
@@ -32,12 +36,51 @@ export default function FileUploadComponent() {
   const [loading, setLoading] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [openModal, setOpenModal] = useState(false); // State for opening and closing modal
+  const [openModal, setOpenModal] = useState(false); // state for opening and closing modal
+  const [user, setUser] = useState(null); // contain user data when user is signed in, null when user is signed out
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  // first useEffect - for updating the user state from local storage on storage events
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const userEmail = localStorage.getItem('userEmail');
+      if (userEmail) {
+        console.log("Setting user from storage change:", userEmail);
+        setUser({ email: userEmail });
+      } else {
+        console.log("Resetting user from storage change.");
+        setUser(null);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+
+  // second useEffect - for setting the initial user state from local storage
+  useEffect(() => {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      console.log("Setting initial user:", userEmail);
+      setUser({ email: userEmail });
+    }
+  }, []);
+
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
 
   const submitFile = () => {
     setLoading(true);
@@ -73,7 +116,7 @@ export default function FileUploadComponent() {
     <>
       <div className="container">
         <div style={{ textAlign: 'right' }}>
-          <div id="loginButton" onClick={handleOpen}>Sign In </div>
+          {renderUserButton(user, handleOpen, toggleDropdown, showDropdown)}
         </div>
         <Helmet>
           <title>NeuralNavigate</title>

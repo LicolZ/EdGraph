@@ -19,6 +19,7 @@ export default function SignIn({switchForm}) {
       const token = response.data.token;
       if (token) {
         localStorage.setItem('token', token);
+        localStorage.setItem('userEmail', email);  // save the email
       } else {
         const errors = Object.values(response.data).flat().join(' ');
         setError(errors);

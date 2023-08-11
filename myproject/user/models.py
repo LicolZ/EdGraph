@@ -21,7 +21,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, error_messages={
-        'unique': "A user is already registered with this e-mail address.",
+        'unique': "A user is already registered with this e-mail address",
     })
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
