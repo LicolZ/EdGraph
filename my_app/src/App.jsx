@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 import { addEdge, useNodesState, useEdgesState, } from 'reactflow'; // Import addEdge from reactflow
 import ReactFlowComponent from './react_flow/reactFlowComponent';
 import Authentication from './user/Authentication';
-import { renderUserButton } from './user/userUtils';
+import { renderUserButton, signOut } from './user/userUtils';
 import { createNode, createEdgesFromRelationships } from './react_flow/reactFlowNodesEdges';
 import './App.css';
 import './index.css';
@@ -82,7 +82,7 @@ export default function FileUploadComponent() {
   return (
     <div className="container">
       <div style={{ textAlign: 'right' }}>
-        {renderUserButton(user, handleOpen, toggleDropdown, showDropdown)}
+        {renderUserButton(user, handleOpen, toggleDropdown, showDropdown, signOut, setUser)}
       </div>
       <Helmet>
         <title>NeuralNavigate</title>
@@ -112,7 +112,7 @@ export default function FileUploadComponent() {
           <Modal.Title className="modal-title">Neural Navigate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Authentication />
+          <Authentication setUser={setUser} />
         </Modal.Body>
       </Modal>
     </div>

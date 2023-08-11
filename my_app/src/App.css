@@ -248,3 +248,21 @@
   color: darkgrey;
 }
 
+
+/* React Flow Components */ 
+.buttonNodeButton {
+  background: transparent;
+  border: none;
+  color: #FFF;
+  border-radius: 0px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  padding: 10px; /* padding moved from div to button */
+  box-sizing: border-box;
+}
+
+.buttonNodeButton:hover {
+  background-color: #444444;
+}

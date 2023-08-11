@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Handle } from 'reactflow';
-import '../ReactFlowComponent.css';
+import '../App.css';
 
 
 const ButtonNode = ({ data }) => {

@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-
 export const signOut = (setUser) => {
     // Remove token and user email from local storage
     localStorage.removeItem('token');
@@ -13,7 +12,7 @@ export const signOut = (setUser) => {
     // You may need to make an axios request here.
   };
 
-export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut) => {
+export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut, setUser) => {
     if (user && user.email) {
       const displayEmail = user.email.split('@')[0];
       return (
@@ -28,7 +27,7 @@ export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown,
                 <div className="dropdown-items">
                   <button onClick={() => { /* go to My Profile */ }}>My Profile</button>
                   <button onClick={() => { /* go to Saved Graphs */ }}>Saved Graphs</button>
-                  <button onClick={() => { /* sign out */ }}>Sign Out →</button>
+                  <button onClick={() => { signOut(setUser) }}>Sign Out →</button>
                 </div>
               </div>
             </>

@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
-export default function Authentication() {
-  const [isSignUp, setIsSignUp] = useState(false); // add this state to manage the current form
+export default function Authentication({ setUser }) {
+  const [isSignUp, setIsSignUp] = useState(false);
 
   return (
     <div className="auth-container">
-      {isSignUp ? <SignUp switchForm={setIsSignUp} /> : <SignIn switchForm={setIsSignUp} />}
+      {isSignUp ? <SignUp switchForm={setIsSignUp} setUser={setUser} /> : <SignIn switchForm={setIsSignUp} setUser={setUser} />}
     </div>
   );
 }
-
