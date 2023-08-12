@@ -112,7 +112,7 @@ export default function FileUploadComponent() {
           <Modal.Title className="modal-title">Neural Navigate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Authentication setUser={setUser} />
+          <Authentication setUser={setUser} closeModal={handleClose} setShowDropdown={setShowDropdown}/>
         </Modal.Body>
       </Modal>
     </div>

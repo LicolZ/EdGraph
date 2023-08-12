@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function SignUp({ switchForm }) {
+export default function SignUp({ switchForm, setUser, closeModal, setShowDropdown }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -16,11 +16,14 @@ export default function SignUp({ switchForm }) {
         email,
         password,
       });
-
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem('token', token);
         localStorage.setItem('userEmail', email);  // save the email
-        // Optionally redirect or perform some other action on successful sign up
+        setUser({ email: email }); // update user state after successful sign-in
+        closeModal();
+        setShowDropdown(false);
+        // optionally redirect or perform some other action on successful sign up
       } else {
         const errors = Object.values(response.data).flat().join(' ');
         setError(errors);

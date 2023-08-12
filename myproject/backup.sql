@@ -381,6 +381,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 17	admin	0002_logentry_remove_auto_add	2023-08-09 12:40:09.612008-07
 18	admin	0003_logentry_add_action_flag_choices	2023-08-09 12:40:09.615041-07
 19	sessions	0001_initial	2023-08-09 12:40:09.62123-07
+20	user	0002_alter_customuser_email	2023-08-11 12:30:05.334283-07
 \.
 
 
@@ -397,8 +398,6 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 --
 
 COPY public.user_customuser (id, password, last_login, is_superuser, email, is_active, is_staff) FROM stdin;
-6	pbkdf2_sha256$600000$lRz8rDcyiaf3mo1jzpDX7W$sOdvMrWl6HUvBgC7GI6ljollvxVz0l3C4NcbrDVZfLk=	\N	f	licol.havaiia@gmail.com	t	f
-5	pbkdf2_sha256$600000$lODf4zANq5x94ch4lKUwls$WUxrjk3HLvofYBDEM7bFxHrWBT4azV0fy1SaN1/GNSo=	2023-08-11 12:25:28.67094-07	f	neolevzion1@gmail.com	t	f
 \.
 
 
@@ -457,7 +456,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 6, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 19, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 20, true);
 
 
 --
@@ -471,7 +470,7 @@ SELECT pg_catalog.setval('public.user_customuser_groups_id_seq', 1, false);
 -- Name: user_customuser_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_customuser_id_seq', 6, true);
+SELECT pg_catalog.setval('public.user_customuser_id_seq', 14, true);
 
 
 --

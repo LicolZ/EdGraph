@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function SignIn({ switchForm, setUser }) { // Add the setUser prop here
+export default function SignIn({ switchForm, setUser, closeModal, setShowDropdown }) { // Add the setUser prop here
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -20,7 +20,9 @@ export default function SignIn({ switchForm, setUser }) { // Add the setUser pro
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('userEmail', email);
-        setUser({ email: email }); // Update user state after successful sign-in
+        setUser({ email: email }); // update user state after successful sign-in
+        closeModal();
+        setShowDropdown(false);
       } else {
         const errors = Object.values(response.data).flat().join(' ');
         setError(errors);
