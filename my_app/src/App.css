@@ -47,16 +47,16 @@
 
   #loginButton {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 11px;
+    right: 0px;
     background-color: transparent; /* no background */
-    color: #1A192B; /* color of X*/
+    color: #1A192B; 
     border: none;
     padding: 7px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 15px; /* increase the size of X */
+    font-size: 15px; 
     margin: 5px 8px;
     cursor: pointer;
   }
@@ -67,7 +67,7 @@
 
 
 /* SignIn/SignUp Modal */
-.modal {
+.signin-signup-modal {
   position: fixed;
   top: 60%;
   left: 50%;
@@ -75,41 +75,22 @@
   width: 100%;
   max-width: 600px;
   background-color: white;
-  padding: 20px;
-  border-radius: 4px;
+  padding: 30px;
+  padding-bottom: 105px;
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* modal sits on top of other elements */
-  display: none; /* by default, modal is hidden */
 }
 
-.modal-open {
-  display: block; /* when the modal is open, it is displayed */
-}
-
-.modal-header,
-.modal-footer {
-  padding: 10px;
-}
-
-.modal-title {
+.signin-signup-modal-title {
   font-family: 'Inter', sans-serif;  
   font-size: 25px; /* replace with the size you want */
   text-align: center; /* this will center the text */
   color: #070442;
-  padding-top: 25px;
+  padding: 16px;
   width: 100%; /* ensures the text alignment property above works correctly */
 }
 
-
-.modal-body {
-  padding-top: 15px;
-  padding-bottom: 80px;
-  padding-left: 17px;
-  padding-right: 17px;
-}
-
-
-/* Authentication.css */
 .auth-container {
   display: flex;
   flex-direction: column;
@@ -169,7 +150,7 @@
 .signup {
   color: rgb(117, 117, 117);
   text-decoration: none;
-  padding-top: 16px;
+  padding-top: 25px;
   cursor: pointer;
 }
 
@@ -179,7 +160,7 @@
   font-size: 12px;
 }
 
-/* Signed In User Navbar */ 
+/* Signed In User Dropdown */ 
 #usernameDropdownButton {
   position: absolute;
   top: 10px;
@@ -197,7 +178,7 @@
 }
 
 #usernameDropdownButton:hover {
-  color: rgb(150, 150, 150); /* On hover, X becomes dark grey */
+  color: rgb(150, 150, 150);
 }
 
 .dropdown-content {
@@ -246,6 +227,61 @@
 
 #closeDropdownButton:hover {
   color: darkgrey;
+}
+
+
+/* User Profile */ 
+.user-profile-modal {
+  position: fixed;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  padding: 30px;
+  padding-bottom: 55px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* modal sits on top of other elements */
+}
+
+.user-profile-modal-title {
+  font-family: 'Inter', sans-serif;  
+  font-size: 20px; /* replace with the size you want */
+  text-align: center; /* this will center the text */
+  color: #070442;
+  margin-top: 1px;
+  padding: 10px;
+  width: 100%; /* ensures the text alignment property above works correctly */
+}
+
+.user-profile-modal-input-fields {
+  margin-bottom: 15px;
+}
+
+.user-profile-modal-save-button {
+  position: absolute;
+  right: 10px; /* adjust if you want some space from the right edge */
+  padding-top: 15px;
+  padding-right: 15px;
+  background-color: transparent; /* no background */
+  color: #212036; 
+  border: none;
+  text-decoration: none;
+  font-size: 15px; 
+  cursor: pointer;
+}
+
+.user-profile-modal-save-button:hover {
+  color: darkgrey; /* On hover, X becomes dark grey */
+}
+
+.user-profile-modal label {
+  font-size: 13px;  /* taken from .user-profile-modal-save-button */
+  font-family: 'Inter', sans-serif; /* if you want the same font-family */
+  color: #1A192B;  /* taken from .user-profile-modal-save-button */
+  /* Add any additional styles you want for these labels here */
 }
 
 

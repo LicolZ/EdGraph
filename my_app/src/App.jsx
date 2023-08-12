@@ -9,6 +9,8 @@ import ReactFlowComponent from './react_flow/reactFlowComponent';
 import Authentication from './user/Authentication';
 import { renderUserButton, signOut } from './user/userUtils';
 import { createNode, createEdgesFromRelationships } from './react_flow/reactFlowNodesEdges';
+import Profile from './user/Profile';
+
 import './App.css';
 import './index.css';
 
@@ -20,6 +22,7 @@ export default function FileUploadComponent() {
   const [openModal, setOpenModal] = useState(false);
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [openProfileModal, setOpenProfileModal] = useState(false);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -50,6 +53,8 @@ export default function FileUploadComponent() {
     setShowDropdown(!showDropdown);
   };
 
+  // handlers for opening and closing modals
+
   const handleOpen = () => {
     setOpenModal(true);
   };
@@ -57,6 +62,16 @@ export default function FileUploadComponent() {
   const handleClose = () => {
     setOpenModal(false);
   };
+
+  const handleOpenProfile = () => {
+    setOpenProfileModal(true);
+    setShowDropdown(false);
+  };
+
+  const handleCloseProfile = () => {
+      setOpenProfileModal(false);
+  };
+
 
   const submitFile = () => {
     if (!file) return;
@@ -82,7 +97,7 @@ export default function FileUploadComponent() {
   return (
     <div className="container">
       <div style={{ textAlign: 'right' }}>
-        {renderUserButton(user, handleOpen, toggleDropdown, showDropdown, signOut, setUser)}
+        {renderUserButton(user, handleOpen, toggleDropdown, showDropdown, signOut, setUser, handleOpenProfile, handleCloseProfile)}
       </div>
       <Helmet>
         <title>NeuralNavigate</title>
@@ -105,16 +120,27 @@ export default function FileUploadComponent() {
       <Modal
         show={openModal}
         onHide={handleClose}
-        className="modal"
+        className="signin-signup-modal"
       >
         <button id="loginButton" onClick={handleClose}>X</button>
         <Modal.Header>
-          <Modal.Title className="modal-title">Neural Navigate</Modal.Title>
+          <Modal.Title className="signin-signup-modal-title">Neural Navigate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Authentication setUser={setUser} closeModal={handleClose} setShowDropdown={setShowDropdown}/>
         </Modal.Body>
       </Modal>
+
+      {/* My Profile modal */}
+      <Modal
+        show={openProfileModal}
+        onHide={handleCloseProfile}
+        className="user-profile-modal"
+      >
+        <Profile user={user} closeModal={handleCloseProfile} setShowDropdown={setShowDropdown} />
+        
+      </Modal>
+
     </div>
   );
 }
