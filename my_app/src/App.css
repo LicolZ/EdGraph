@@ -190,7 +190,7 @@
   right: 0;         
   width: 270px;     
   height: 100vh;    
-  z-index: 1500;    
+  z-index: 1200;    
   background-color: #fafafa;
   box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.2);
   overflow-y: auto; 
@@ -235,26 +235,24 @@
 
 /* User Profile */ 
 .user-profile-modal {
-  position: fixed;
-  top: 55%;
+  position: relative;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -43%);
   width: 100%;
   max-width: 600px;
   background-color: white;
   padding: 30px;
-  padding-bottom: 55px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* modal sits on top of other elements */
+  z-index: 1100; /* modal sits on top of other elements */
 }
 
 .user-profile-modal-title {
   font-family: 'Inter', sans-serif;  
-  font-size: 20px; /* replace with the size you want */
+  font-size: 17px; /* replace with the size you want */
   text-align: center; /* this will center the text */
-  color: #070442;
-  margin-top: 1px;
+  color: #07042f;
+  margin-top: 25px;
   padding: 10px;
   width: 100%; /* ensures the text alignment property above works correctly */
 }
@@ -262,19 +260,15 @@
 .user-profile-modal-input-fields {
   margin-bottom: 25px;
   overflow-y: auto;
-  max-height: 100vh;
   padding: 8px 13px;
 }
 
-/* Disable vertical resizing of the textarea */
+/* disable vertical resizing of the textarea */
 .user-profile-modal-input-fields textarea {
-  resize: vertical;
-  overflow: auto;
-}
-
-
-.user-profile-modal-save-button:hover {
-  color: darkgrey; /* On hover, X becomes dark grey */
+  box-sizing: border-box;  /* ensure padding is inside the element, not outside */
+  height: 28px;  
+  resize: none;
+  overflow: hidden;
 }
 
 .user-profile-modal label {
@@ -293,33 +287,6 @@
 
 }
 
-.about-me-textarea {
-  line-height: 1; /* Adjust this value as needed */
-}
-
-
-.custom-select:after {
-  content: '\25BC'; /* This is a down arrow */
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.form-control::placeholder {
-    font-size: 12px;
-    color: #b1b1b1; /* This gives a faint color for the placeholder */
-}
-
-
-
-
-/* Remove previous styles for custom-select */
-.custom-select {
-    border: none;
-}
-
 .change-password-button {
   background-color: transparent;
   color: #2a98ff; 
@@ -335,15 +302,18 @@
 
 .user-profile-modal-save-button {
   position: absolute;
-  right: 10px; /* adjust if you want some space from the right edge */
-  padding-top: 15px;
-  padding-right: 15px;
+  right: 20px; /* adjust if you want some space from the right edge */
+  bottom: 20px;
   background-color: transparent; /* no background */
-  color: #212036; 
+  color: #25233d; 
   border: none;
   text-decoration: none;
   font-size: 15px;
   cursor: pointer;
+}
+
+.user-profile-modal-save-button:hover {
+  color: darkgrey; /* On hover, X becomes dark grey */
 }
 
 /* React Flow Components */ 

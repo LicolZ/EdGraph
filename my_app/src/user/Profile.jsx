@@ -1,39 +1,36 @@
 // NeuralNavivate/my_app/src/user/Profile.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 
 export default function Profile({ user, closeModal, setShowDropdown }) {
-    const [name, setName] = useState(user.name || user.email.split('@')[0] || '');
-    const [password, setPassword] = useState('');
-    const [gender, setGender] = useState(user.gender || '');
-    const [about, setAbout] = useState(user.about || '');
     
+    const [name, setName] = useState(user ? user.name || user.email.split('@')[0] : '');
+    const [gender, setGender] = useState(user ? user.gender : '');
+    const [about, setAbout] = useState(user ? user.about : '');
+    const [textareaHeight, setTextareaHeight] = useState('auto');
+    const textareaRef = useRef(null);
+
     const handleSave = () => {
         // Handle the saving process here
         closeModal();
     }
 
-    const adjustTextareaHeight = (target) => {
-        target.style.height = 'inherit'; // Reset height first
-        const computed = window.getComputedStyle(target);
-        const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
-                     + parseInt(computed.getPropertyValue('border-bottom-width'), 10)
-                     + target.scrollHeight;
-                     
-        target.style.height = height + 'px';
-    }
-
-    useEffect(() => {
-        const textareaElement = document.querySelector('.user-profile-modal-input-fields textarea');
-        if (textareaElement) adjustTextareaHeight(textareaElement);
-    }, []);
-    
-    
+    useLayoutEffect(() => {
+        if (textareaRef.current) {
+            setTextareaHeight(`${textareaRef.current.scrollHeight}px`);
+        }
+    }, [about]);
 
     if (!user) {
-        return null;  // Replace null with some fallback JSX if needed.
+        return null;  // replace null with some fallback JSX if needed.
     }
 
+    
+    const adjustTextareaHeight = (target) => {
+        target.style.height = 'auto'; // reset height to auto before calculating the desired height
+        target.style.height = `${target.scrollHeight}px`;
+    }
+    
     return (
         <div className="user-profile-modal">
             <h2 className="user-profile-modal-title">My Profile</h2>
@@ -66,9 +63,11 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
             </div>
             
             <div className="user-profile-modal-input-fields">
-                <label>About me</label>
+                <label>About Me</label>
                 <textarea 
-                    className="form-control about-me-textarea" 
+                    ref={textareaRef}
+                    style={{ height: textareaHeight }}
+                    className="form-control user-profile-modal-input-fields textarea" 
                     value={about} 
                     onChange={(e) => {
                         setAbout(e.target.value);
@@ -76,9 +75,7 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
                     }} 
                     placeholder="Tell us about yourself (interests, experience, etc.)"
                 ></textarea>
-
             </div>
-
             <button className="user-profile-modal-save-button" onClick={handleSave}>Save</button>
             <button id="loginButton" onClick={closeModal}>X</button>
         </div>
