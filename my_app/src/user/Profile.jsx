@@ -1,6 +1,6 @@
 // NeuralNavivate/my_app/src/user/Profile.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Profile({ user, closeModal, setShowDropdown }) {
     const [name, setName] = useState(user.name || '');
@@ -13,6 +13,23 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
         closeModal();
     }
 
+    const adjustTextareaHeight = (target) => {
+        target.style.height = 'inherit'; // Reset height first
+        const computed = window.getComputedStyle(target);
+        const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+                     + parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+                     + target.scrollHeight;
+                     
+        target.style.height = height + 'px';
+    }
+
+    useEffect(() => {
+        const textareaElement = document.querySelector('.user-profile-modal-input-fields textarea');
+        if (textareaElement) adjustTextareaHeight(textareaElement);
+    }, []);
+    
+    
+
     if (!user) {
         return null;  // Replace null with some fallback JSX if needed.
     }
@@ -20,35 +37,49 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
     return (
         <div className="user-profile-modal">
             <h2 className="user-profile-modal-title">My Profile</h2>
-            <div>
+            
+            <div className="user-profile-modal-input-fields">
                 <label>Name</label>
                 <input className="form-control" type="text" value={user.email.split('@')[0]} onChange={(e) => setName(e.target.value)} />
             </div>
-            <div>
+            
+            <div className="user-profile-modal-input-fields">
                 <label>Email</label>
                 <input className="form-control" type="email" value={user.email} readOnly />
             </div>
-            <div>
+            
+            <div className="user-profile-modal-input-fields">
                 <label>Password</label>
-                <input className="form-control" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <div className="password-container">
+                    <button className="change-password-button">Change Password</button>
+                </div>
             </div>
-            <div>
+            <div className="user-profile-modal-input-fields">
                 <label>Gender</label>
-                <select value={gender} onChange={(e) => setGender(e.target.value)}>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
+                <div className="custom-select">
+                    <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
             </div>
-            <div>
+            
+            <div className="user-profile-modal-input-fields">
                 <label>About me</label>
-                <textarea className="form-control" value={about} onChange={(e) => setAbout(e.target.value)}></textarea>
+                <textarea 
+                    className="form-control" 
+                    value={about} 
+                    onChange={(e) => {
+                        setAbout(e.target.value);
+                        adjustTextareaHeight(e.target);
+                    }} 
+                    placeholder="Tell us about yourself (interests, experience, etc.)"
+                ></textarea>
             </div>
+
             <button className="user-profile-modal-save-button" onClick={handleSave}>Save</button>
             <button id="loginButton" onClick={closeModal}>X</button>
         </div>
     );
 }
-
-
-// Tell us about yourself (interests, experience, etc.)

@@ -49,15 +49,14 @@
     position: absolute;
     top: 11px;
     right: 0px;
-    background-color: transparent; /* no background */
     color: #1A192B; 
-    border: none;
     padding: 7px 16px;
-    text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 15px; 
     margin: 5px 8px;
+    border: none;
+    background: transparent;
     cursor: pointer;
   }
   
@@ -233,7 +232,7 @@
 /* User Profile */ 
 .user-profile-modal {
   position: fixed;
-  top: 62%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
@@ -257,21 +256,18 @@
 }
 
 .user-profile-modal-input-fields {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
-.user-profile-modal-save-button {
-  position: absolute;
-  right: 10px; /* adjust if you want some space from the right edge */
-  padding-top: 15px;
-  padding-right: 15px;
-  background-color: transparent; /* no background */
-  color: #212036; 
-  border: none;
-  text-decoration: none;
-  font-size: 15px; 
-  cursor: pointer;
+/* Disable vertical resizing of the textarea */
+.user-profile-modal-input-fields textarea {
+  resize: vertical;
+  overflow: auto;
 }
+
+
 
 .user-profile-modal-save-button:hover {
   color: darkgrey; /* On hover, X becomes dark grey */
@@ -284,6 +280,57 @@
   /* Add any additional styles you want for these labels here */
 }
 
+
+.form-control, .custom-select select {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+}
+
+.form-control::placeholder {
+    font-size: 12px;
+    color: #b1b1b1; /* This gives a faint color for the placeholder */
+}
+
+.custom-select:after {
+    content: '\25BC'; /* This is a down arrow */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Remove previous styles for custom-select */
+.custom-select {
+    border: none;
+}
+
+.change-password-button {
+  background-color: transparent;
+  color: #2a98ff; 
+  font-size: 13px; 
+  margin: 5px -9px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+    
+}
+
+.user-profile-modal-save-button {
+  position: absolute;
+  right: 10px; /* adjust if you want some space from the right edge */
+  padding-top: 15px;
+  padding-right: 15px;
+  background-color: transparent; /* no background */
+  color: #212036; 
+  border: none;
+  text-decoration: none;
+  font-size: 15px;
+  cursor: pointer;
+}
 
 /* React Flow Components */ 
 .buttonNodeButton {
