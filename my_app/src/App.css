@@ -64,7 +64,11 @@
     color: darkgrey; /* On hover, X becomes dark grey */
   }
 
+  .modal:focus, .form-control:focus {
+    outline: none;
+  }
 
+  
 /* SignIn/SignUp Modal */
 .signin-signup-modal {
   position: fixed;
@@ -259,6 +263,7 @@
   margin-bottom: 25px;
   overflow-y: auto;
   max-height: 100vh;
+  padding: 8px 13px;
 }
 
 /* Disable vertical resizing of the textarea */
@@ -266,7 +271,6 @@
   resize: vertical;
   overflow: auto;
 }
-
 
 
 .user-profile-modal-save-button:hover {
@@ -284,7 +288,23 @@
 .form-control, .custom-select select {
     border: none;
     border-bottom: 1px solid #ccc;
+    line-height: 1.7;
     border-radius: 0;
+
+}
+
+.about-me-textarea {
+  line-height: 1; /* Adjust this value as needed */
+}
+
+
+.custom-select:after {
+  content: '\25BC'; /* This is a down arrow */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .form-control::placeholder {
@@ -292,14 +312,8 @@
     color: #b1b1b1; /* This gives a faint color for the placeholder */
 }
 
-.custom-select:after {
-    content: '\25BC'; /* This is a down arrow */
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
+
+
 
 /* Remove previous styles for custom-select */
 .custom-select {

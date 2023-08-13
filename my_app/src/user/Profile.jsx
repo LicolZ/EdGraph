@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 
 export default function Profile({ user, closeModal, setShowDropdown }) {
-    const [name, setName] = useState(user.name || '');
+    const [name, setName] = useState(user.name || user.email.split('@')[0] || '');
     const [password, setPassword] = useState('');
     const [gender, setGender] = useState(user.gender || '');
     const [about, setAbout] = useState(user.about || '');
-
+    
     const handleSave = () => {
         // Handle the saving process here
         closeModal();
@@ -40,7 +40,7 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
             
             <div className="user-profile-modal-input-fields">
                 <label>Name</label>
-                <input className="form-control" type="text" value={user.email.split('@')[0]} onChange={(e) => setName(e.target.value)} />
+                <input className="form-control" type="text" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             
             <div className="user-profile-modal-input-fields">
@@ -68,7 +68,7 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
             <div className="user-profile-modal-input-fields">
                 <label>About me</label>
                 <textarea 
-                    className="form-control" 
+                    className="form-control about-me-textarea" 
                     value={about} 
                     onChange={(e) => {
                         setAbout(e.target.value);
@@ -76,6 +76,7 @@ export default function Profile({ user, closeModal, setShowDropdown }) {
                     }} 
                     placeholder="Tell us about yourself (interests, experience, etc.)"
                 ></textarea>
+
             </div>
 
             <button className="user-profile-modal-save-button" onClick={handleSave}>Save</button>
