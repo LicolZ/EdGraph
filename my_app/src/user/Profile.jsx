@@ -50,8 +50,10 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
             });
     
             if (response.status === 200) {
-                console.log("Profile updated successfully!");
-    
+                
+                localStorage.setItem('name', response.data.user.name);
+                localStorage.setItem('about', response.data.user.about);
+                
                 // Update the local state with the updated user data
                 setName(response.data.user.name);
                 setAbout(response.data.user.about);

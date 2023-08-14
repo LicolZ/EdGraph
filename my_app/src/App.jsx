@@ -38,7 +38,22 @@ export default function FileUploadComponent() {
     const handleStorageChange = (e) => {
       if (e.key === 'userEmail') {
         const userEmail = e.newValue;
-        setUser(userEmail ? { email: userEmail } : null);
+        setUser((prevState) => ({
+          ...prevState,
+          email: userEmail || prevState.email,
+        }));
+      } else if (e.key === 'name') {
+        const userName = e.newValue;
+        setUser((prevState) => ({
+          ...prevState,
+          name: userName || prevState.name,
+        }));
+      } else if (e.key === 'about') {
+        const userAbout = e.newValue;
+        setUser((prevState) => ({
+          ...prevState,
+          about: userAbout || prevState.about,
+        }));
       }
     };
   
@@ -49,12 +64,17 @@ export default function FileUploadComponent() {
     };
   }, []);
   
+  
 
   useEffect(() => {
     const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      setUser({ email: userEmail });
-    }
+    const userName = localStorage.getItem('name');
+    const userAbout = localStorage.getItem('about');
+    setUser({
+      email: userEmail || '',
+      name: userName || '',
+      about: userAbout || '',
+    });
   }, []);
 
   const toggleDropdown = useCallback(() => {
