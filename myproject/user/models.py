@@ -23,6 +23,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, error_messages={
         'unique': "A user is already registered with this e-mail address",
     })
+    name = models.CharField(max_length=255, blank=True, null=True)  # Name field
+    about = models.TextField(blank=True, null=True)  # About Me field
+    
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     

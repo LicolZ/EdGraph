@@ -232,20 +232,20 @@
   color: darkgrey;
 }
 
-
 /* User Profile */ 
-.user-profile-modal {
-  position: relative;
-  left: 50%;
-  transform: translate(-50%, -43%);
+.user-profile-modal .modal-content {
+  position: absolute;
+  top: 21%;
+  left: 12%;             /* Start positioning at the horizontal center */
   width: 100%;
   max-width: 600px;
   background-color: white;
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1100; /* modal sits on top of other elements */
+  z-index: 1100;
 }
+
 
 .user-profile-modal-title {
   font-family: 'Inter', sans-serif;  
@@ -258,8 +258,7 @@
 }
 
 .user-profile-modal-input-fields {
-  margin-bottom: 25px;
-  overflow-y: auto;
+  margin-bottom: 22px;
   padding: 8px 13px;
 }
 
@@ -278,13 +277,10 @@
   /* Add any additional styles you want for these labels here */
 }
 
-
-.form-control, .custom-select select {
+.form-control {
     border: none;
     border-bottom: 1px solid #ccc;
-    line-height: 1.7;
-    border-radius: 0;
-
+    line-height: 1.6;
 }
 
 .change-password-button {

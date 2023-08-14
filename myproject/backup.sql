@@ -213,7 +213,9 @@ CREATE TABLE public.user_customuser (
     is_superuser boolean NOT NULL,
     email character varying(254) NOT NULL,
     is_active boolean NOT NULL,
-    is_staff boolean NOT NULL
+    is_staff boolean NOT NULL,
+    about text,
+    name character varying(255)
 );
 
 
@@ -382,6 +384,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 18	admin	0003_logentry_add_action_flag_choices	2023-08-09 12:40:09.615041-07
 19	sessions	0001_initial	2023-08-09 12:40:09.62123-07
 20	user	0002_alter_customuser_email	2023-08-11 12:30:05.334283-07
+21	user	0003_customuser_about_customuser_name	2023-08-13 15:40:50.12061-07
 \.
 
 
@@ -397,7 +400,9 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 -- Data for Name: user_customuser; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.user_customuser (id, password, last_login, is_superuser, email, is_active, is_staff) FROM stdin;
+COPY public.user_customuser (id, password, last_login, is_superuser, email, is_active, is_staff, about, name) FROM stdin;
+17	pbkdf2_sha256$600000$eHe2X8gPxuca56qReHw298$jxAdS764NqRce73ugCuHFWQyK4vlG5saIjHdqlRR4VQ=	\N	f	lll@gmai.com	t	f	\N	\N
+16	pbkdf2_sha256$600000$uJKIRLlt0yBthytALMarXs$lReXvNgNpMJwOhVWClrw9fKi+qVuUBxU6IaKNMJAXNU=	2023-08-13 17:52:37.769475-07	f	neo@gmail.co	t	f	\N	\N
 \.
 
 
@@ -456,7 +461,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 6, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 20, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 21, true);
 
 
 --
@@ -470,7 +475,7 @@ SELECT pg_catalog.setval('public.user_customuser_groups_id_seq', 1, false);
 -- Name: user_customuser_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_customuser_id_seq', 14, true);
+SELECT pg_catalog.setval('public.user_customuser_id_seq', 17, true);
 
 
 --
