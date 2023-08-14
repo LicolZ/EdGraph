@@ -235,8 +235,9 @@
 /* User Profile */ 
 .user-profile-modal .modal-content {
   position: absolute;
-  top: 21%;
-  left: 12%;             /* Start positioning at the horizontal center */
+  top: 55%;
+  left: 50%;  /* Start positioning at the horizontal center */
+  transform: translate(-50%, -50%); /* Add this line */
   width: 100%;
   max-width: 600px;
   background-color: white;

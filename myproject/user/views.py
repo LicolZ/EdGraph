@@ -33,20 +33,17 @@ class SignupView(APIView):
     serializer_class = UserSerializer
 
     def post(self, request):
-        print("Inside SignupView post method")  # Add this
-        # # Extract email and password from the request data
+        # extract email and password from the request data
         email = request.data.get('email')
         password = request.data.get('password')
         
-        # Check if either email or password is missing
+        # check if either email or password is missing
         if not email or not password:
             return JsonResponse({"non_field_errors": ["Missing required fields"]}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-        
-            serializer.save()
-            user = CustomUser.objects.get(email=serializer.validated_data['email'])
+            user = serializer.save()  # directly get the user instance after saving
             token = generate_token_for_user(user)
             return JsonResponse({
                 'response': 'Successfully registered a new user.',
@@ -55,7 +52,6 @@ class SignupView(APIView):
             }, status=status.HTTP_201_CREATED)
         
         
-        print("Serializer Errors:", serializer.errors)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -74,13 +70,16 @@ class SigninView(APIView):
             user.last_login = timezone.now()
             user.save()
             refresh = RefreshToken.for_user(user)
+
+            # Return tokens in response body to match frontend expectation
             return JsonResponse({
+                "user": UserSerializer(user).data,
                 "token": str(refresh.access_token),
                 "refresh": str(refresh)
             }, status=status.HTTP_200_OK)
-
-        
+            
         return JsonResponse({"non_field_errors": ["Invalid login credentials"]}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class UpdateProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
