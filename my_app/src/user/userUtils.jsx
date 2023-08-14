@@ -17,7 +17,7 @@ export const signOut = (setUser,  handleCloseProfile) => {
 
 export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut, setUser, handleOpenProfile, handleCloseProfile) => {
     if (user && user.email) {
-      const displayEmail = user.email.split('@')[0];
+      const displayEmail = user.name || user.email.split('@')[0];
       return (
         <>
           <button id="usernameDropdownButton" onClick={toggleDropdown}>
