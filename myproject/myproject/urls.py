@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from user.views import SignupView, SigninView, ProcessFileView, UpdateProfileView, TokenRefreshView
+from user.views import SignupView, SigninView, ProcessFileView, UpdateProfileView
 
 urlpatterns = [
     path('process/', ProcessFileView.as_view(), name='process_file'),
@@ -29,6 +29,5 @@ urlpatterns = [
     path('api/signup/', SignupView.as_view(), name='signup'),
     path('api/signin/', SigninView.as_view(), name='signin'),
     path('update_profile/', UpdateProfileView.as_view(), name='update-profile'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
     # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]

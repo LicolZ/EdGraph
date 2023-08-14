@@ -56,7 +56,7 @@ SIMPLE_JWT = {
 
     'ALLOWED_ALGORITHMS': ('HS256',),
 
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=20),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
 
     'UPDATE_LAST_LOGIN': False,

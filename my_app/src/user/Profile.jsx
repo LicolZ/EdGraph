@@ -1,25 +1,30 @@
 // NeuralNavivate/my_app/src/user/Profile.jsx
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Profile({ user, closeModal, setShowDropdown, isVisible }) {
+export default function Profile({ user, closeModal, onUserUpdate }) {
     
+    const [userState, setUserState] = useState(user);
     const [name, setName] = useState(user ? user.name || user.email.split('@')[0] : '');
-    const [gender, setGender] = useState(user ? user.gender : '');
     const [about, setAbout] = useState(user ? user.about : '');
-    const [textareaHeight, setTextareaHeight] = useState('auto');
     const textareaRef = useRef(null);
     const modalRef = useRef(null); // Reference for modal positioning
+    const [textareaHeight] = useState('auto');
+
+    useEffect(() => {
+        setUserState(user);
+    }, [user]);
 
     async function refreshToken() {
         const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
         const refreshToken = localStorage.getItem('refreshToken');  // Assuming you save the refresh token in local storage
-    
+        console.log('Sending refresh token:', refreshToken);
+
         try {
-            const response = await axios.post(`${baseUrl}/token/refresh/`, {
+            const response = await axios.post(`${baseUrl}/api/token-refresh/`, {
                 refresh: refreshToken
-            });
+            });            
     
             const newAccessToken = response.data.access;
             localStorage.setItem('token', newAccessToken);
@@ -32,7 +37,7 @@ export default function Profile({ user, closeModal, setShowDropdown, isVisible }
     
     const handleSave = async () => {
         const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-        let token = localStorage.getItem('token');  // Assuming you save the JWT token in local storage
+        let token = localStorage.getItem('token');
     
         try {
             const response = await axios.put(`${baseUrl}/update_profile/`, {
@@ -46,14 +51,25 @@ export default function Profile({ user, closeModal, setShowDropdown, isVisible }
     
             if (response.status === 200) {
                 console.log("Profile updated successfully!");
-                // Update user state or local storage if needed
+    
+                // Update the local state with the updated user data
+                setName(response.data.user.name);
+                setAbout(response.data.user.about);
+                // update any other user data fields here
+    
+                // if storing user data in a parent component or context, update that as well
+                // For example:
+                // updateUser(response.data.user);
+                // propagate updated user to the parent
+                if (onUserUpdate) {
+                    onUserUpdate(response.data.user);
+                }
             }
         } catch (error) {
-            if (error.response.status === 401) { // If token is expired
-                // Attempt to refresh the token
+            if (error.response.status === 401) {
                 const newToken = await refreshToken();
                 if (newToken) {
-                    handleSave();  // Retry saving with the new token
+                    handleSave();
                     return;
                 }
             }
@@ -62,6 +78,7 @@ export default function Profile({ user, closeModal, setShowDropdown, isVisible }
     
         closeModal();
     }
+    
     
 
     if (!user) {
@@ -73,6 +90,7 @@ export default function Profile({ user, closeModal, setShowDropdown, isVisible }
         target.style.height = `${target.scrollHeight}px`;
     }
     
+    console.log("Profile component is re-rendering with name:", name, "and about:", about);
     return (
         <div className="user-profile-modal" ref={modalRef}>
             <h2 className="user-profile-modal-title">My Profile</h2>

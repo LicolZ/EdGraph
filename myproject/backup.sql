@@ -402,7 +402,7 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 
 COPY public.user_customuser (id, password, last_login, is_superuser, email, is_active, is_staff, about, name) FROM stdin;
 17	pbkdf2_sha256$600000$eHe2X8gPxuca56qReHw298$jxAdS764NqRce73ugCuHFWQyK4vlG5saIjHdqlRR4VQ=	\N	f	lll@gmai.com	t	f	\N	\N
-16	pbkdf2_sha256$600000$uJKIRLlt0yBthytALMarXs$lReXvNgNpMJwOhVWClrw9fKi+qVuUBxU6IaKNMJAXNU=	2023-08-13 17:52:37.769475-07	f	neo@gmail.co	t	f	\N	\N
+16	pbkdf2_sha256$600000$uJKIRLlt0yBthytALMarXs$lReXvNgNpMJwOhVWClrw9fKi+qVuUBxU6IaKNMJAXNU=	2023-08-13 21:36:10.262654-07	f	neo@gmail.co	t	f	nsdcjncjndcsc	neossss
 \.
 
 

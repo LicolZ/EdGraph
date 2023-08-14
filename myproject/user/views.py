@@ -22,23 +22,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from scripts.extract_topics import ProcessFile
 from user.serializers import UserSerializer
 
-# token-related functions
-class TokenRefreshView(TokenObtainPairView):
-    def post(self, request):
-        refresh = request.data.get('refresh')
-        
-        if not refresh:
-            return JsonResponse({"error": "Refresh token not provided"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            token = RefreshToken(refresh)
-            access_token = str(token.access_token)
-            
-            return JsonResponse({"access": access_token}, status=status.HTTP_200_OK)
-        
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
+# token-related functions        
 def generate_token_for_user(user):
     """Generate JWT token for a user."""
     refresh = RefreshToken.for_user(user)
@@ -89,8 +73,12 @@ class SigninView(APIView):
         if user:
             user.last_login = timezone.now()
             user.save()
-            token = generate_token_for_user(user)
-            return JsonResponse({"token": token}, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return JsonResponse({
+                "token": str(refresh.access_token),
+                "refresh": str(refresh)
+            }, status=status.HTTP_200_OK)
+
         
         return JsonResponse({"non_field_errors": ["Invalid login credentials"]}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -98,9 +86,7 @@ class UpdateProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request):
-        print(request.headers) # This will print all the headers sent with the request
         
-    # ... rest of your code ...
         user = request.user
         name = request.data.get('name')
         about = request.data.get('about')
@@ -112,7 +98,11 @@ class UpdateProfileView(APIView):
             user.about = about
         
         user.save()
-        return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
+
+        # return updated user data
+        serializer = UserSerializer(user)
+        return JsonResponse({"message": "Profile updated successfully", "user": serializer.data}, status=status.HTTP_200_OK)
+
 
 
 class ProcessFileView(APIView):

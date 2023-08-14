@@ -23,24 +23,32 @@ export default function FileUploadComponent() {
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const handleUserUpdate = (updatedUser) => {
+    setUser(updatedUser);
+};
 
+  
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
+
   useEffect(() => {
-    const handleStorageChange = () => {
-      const userEmail = localStorage.getItem('userEmail');
-      setUser(userEmail ? { email: userEmail } : null);
+    const handleStorageChange = (e) => {
+      if (e.key === 'userEmail') {
+        const userEmail = e.newValue;
+        setUser(userEmail ? { email: userEmail } : null);
+      }
     };
-
+  
     window.addEventListener('storage', handleStorageChange);
-
+  
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
+  
 
   useEffect(() => {
     const userEmail = localStorage.getItem('userEmail');
@@ -49,28 +57,30 @@ export default function FileUploadComponent() {
     }
   }, []);
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+  const toggleDropdown = useCallback(() => {
+    setShowDropdown((prevShow) => !prevShow);
+  }, []);
+
 
   // handlers for opening and closing modals
 
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     setOpenModal(true);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpenModal(false);
-  };
+  }, []);
 
-  const handleOpenProfile = () => {
+  const handleOpenProfile = useCallback(() => {
     setOpenProfileModal(true);
     setShowDropdown(false);
-  };
+  }, []);
 
-  const handleCloseProfile = () => {
-      setOpenProfileModal(false);
-  };
+  const handleCloseProfile = useCallback(() => {
+    setOpenProfileModal(false);
+  }, []);
+
 
 
   const submitFile = () => {
@@ -82,7 +92,7 @@ export default function FileUploadComponent() {
     axios.post(`${baseUrl}/process/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-      },
+      }, 
     })
     .then(response => {
       const topics = response.data.topics;
@@ -137,7 +147,7 @@ export default function FileUploadComponent() {
         onHide={handleCloseProfile}
         className="user-profile-modal"
       >
-        <Profile user={user} closeModal={handleCloseProfile} setShowDropdown={setShowDropdown} />
+        <Profile user={user} closeModal={handleCloseProfile} setShowDropdown={setShowDropdown} onUserUpdate={handleUserUpdate}/>
         
       </Modal>
 
