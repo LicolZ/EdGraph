@@ -1,3 +1,5 @@
+# NeuralNavigate/myproject/manage.py
+
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks.
     essential to run migrations, start the development server, etc."""

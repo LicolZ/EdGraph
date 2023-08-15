@@ -14,11 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+# NeuralNavigate/myproject/myproject/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from user.views import SignupView, SigninView, ProcessFileView, UpdateProfileView
+from user.views import SignupView, SigninView, ProcessFileView, UpdateProfileView, get_definition
 
 urlpatterns = [
     path('process/', ProcessFileView.as_view(), name='process_file'),
@@ -29,5 +32,6 @@ urlpatterns = [
     path('api/signup/', SignupView.as_view(), name='signup'),
     path('api/signin/', SigninView.as_view(), name='signin'),
     path('update_profile/', UpdateProfileView.as_view(), name='update-profile'),
+    path('api/get_definition/', get_definition, name='get-definition'), 
     # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]

@@ -10,10 +10,11 @@ import 'reactflow/dist/style.css';
 import '../App.css';
 
 const nodeTypes = {
-  buttonNode: ButtonNode,
+  buttonNode: ButtonNode
 };
 
-export default function ReactFlowComponent({ nodes, edges, onConnect, onNodesChange, onEdgesChange }) {
+export default function ReactFlowComponent({ nodes, edges, onConnect, onNodesChange, onEdgesChange, user }) {
+  
 
   return (
     <div id="topicsContainer">
@@ -36,3 +37,4 @@ export default function ReactFlowComponent({ nodes, edges, onConnect, onNodesCha
     </div>
   );
 }
+

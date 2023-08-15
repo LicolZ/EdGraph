@@ -10,6 +10,7 @@ import Authentication from './user/Authentication';
 import { renderUserButton, signOut } from './user/userUtils';
 import { createNode, createEdgesFromRelationships } from './react_flow/reactFlowNodesEdges';
 import Profile from './user/Profile';
+import UserContext from './user/UserContext';
 
 import './App.css';
 import './index.css';
@@ -140,13 +141,15 @@ export default function FileUploadComponent() {
           {loading ? "Loading..." : "Generate Graph"}
         </button>
       </div>
-      <ReactFlowComponent 
-        nodes={nodes}
-        edges={edges}
-        onConnect={onConnect}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-      />
+      <UserContext.Provider value={user}>
+        <ReactFlowComponent 
+          nodes={nodes}
+          edges={edges}
+          onConnect={onConnect}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+        />
+      </UserContext.Provider>
       <Modal
         show={openModal}
         onHide={handleClose}

@@ -18,8 +18,7 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
 
     async function refreshToken() {
         const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-        const refreshToken = localStorage.getItem('refreshToken');  // Assuming you save the refresh token in local storage
-        console.log('Sending refresh token:', refreshToken);
+        const refreshToken = localStorage.getItem('refreshToken');  // assuming I save the refresh token in local storage
 
         try {
             const response = await axios.post(`${baseUrl}/api/token-refresh/`, {
@@ -28,14 +27,14 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
     
             const newAccessToken = response.data.access;
             localStorage.setItem('token', newAccessToken);
-            return newAccessToken;
+            return true;
         } catch (error) {
             console.error("Error refreshing token:", error.response.data);
             return null;
         }
     }
     
-    const handleSave = async () => {
+    const handleSave = async (retryCount = 0) => {
         const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
         let token = localStorage.getItem('token');
     
@@ -50,28 +49,23 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
             });
     
             if (response.status === 200) {
-                
                 localStorage.setItem('name', response.data.user.name);
                 localStorage.setItem('about', response.data.user.about);
                 
                 // Update the local state with the updated user data
                 setName(response.data.user.name);
                 setAbout(response.data.user.about);
-                // update any other user data fields here
     
                 // if storing user data in a parent component or context, update that as well
-                // For example:
-                // updateUser(response.data.user);
-                // propagate updated user to the parent
                 if (onUserUpdate) {
                     onUserUpdate(response.data.user);
                 }
             }
         } catch (error) {
-            if (error.response.status === 401) {
-                const newToken = await refreshToken();
-                if (newToken) {
-                    handleSave();
+            if (error.response.status === 401 && retryCount < 1) { // limit retries to once
+                const refreshSuccess = await refreshToken();
+                if (refreshSuccess) {
+                    handleSave(retryCount + 1);  // retry once
                     return;
                 }
             }
@@ -80,7 +74,6 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
     
         closeModal();
     }
-    
     
 
     if (!user) {

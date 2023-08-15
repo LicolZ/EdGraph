@@ -1,5 +1,7 @@
 /* NeuralNavivate/my_app/src/App.css */
 
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
 /* Header Components */
 .upload-section {
     display: flex;
@@ -312,6 +314,52 @@
 .user-profile-modal-save-button:hover {
   color: darkgrey; /* On hover, X becomes dark grey */
 }
+
+
+
+/* TopicDefinitions Modal */
+.topic-definitions-modal {
+  position: absolute;
+  top: 50%;  /* centers vertically */
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  padding: 50px 60px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1100;
+  margin-top: 45px;
+}
+
+.topic-definitions-modal-text {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px; /* replace with the size you want */
+  text-align: center; /* this will center the text */
+  color: #07042f;
+  width: 100%; /* ensures the text alignment property above works correctly */
+  line-height: 1.7;
+  margin-top: 16px;
+  
+}
+
+.topic-definitions-modal-save-button {
+  position: absolute;
+  right: 20px; /* adjust if you want some space from the right edge */
+  bottom: 20px;
+  background-color: transparent; /* no background */
+  color: #25233d; 
+  border: none;
+  text-decoration: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.topic-definitions-modal-save-button:hover {
+  color: darkgrey; /* On hover, X becomes dark grey */
+}
+
 
 /* React Flow Components */ 
 .buttonNodeButton {

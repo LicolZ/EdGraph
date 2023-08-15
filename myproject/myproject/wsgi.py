@@ -1,3 +1,5 @@
+# NeuralNavigate/myproject/myproject/wsgi.py
+
 """
 WSGI config for myproject project.
 

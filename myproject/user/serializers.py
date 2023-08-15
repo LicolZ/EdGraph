@@ -1,4 +1,4 @@
-# serializers.py
+# NeuralNavigate/myproject/user/serializers.py
 from rest_framework import serializers
 from django.core.validators import validate_email
 from .models import CustomUser  
@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         print("Inside validate_email")  # Check if this is printed
         exists_query = CustomUser.objects.filter(email=value)
+        
         if self.instance:
             exists_query = exists_query.exclude(id=self.instance.id)
         if exists_query.exists():

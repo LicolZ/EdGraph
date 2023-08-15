@@ -1,8 +1,10 @@
-# settings/development.py
+# NeuralNavigate/myproject/myproject/settings/development.py
 from .base import *
 DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 # Local PostgreSQL database configuration
 DATABASES = {
@@ -20,3 +22,23 @@ DATABASES = {
 STATIC_URL = '/collected_static/'
 STATICFILES_DIRS = [BASE_DIR / 'static_src',]
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

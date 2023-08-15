@@ -1,4 +1,6 @@
-### views.py - handle HTTP requests and responses ###
+# NeuralNavigate/myproject/user/views.py 
+
+### - handle HTTP requests and responses ###
 
 # Django imports
 import os
@@ -21,6 +23,16 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # local imports
 from scripts.extract_topics import ProcessFile
 from user.serializers import UserSerializer
+from scripts.generate_definitions import generate_personalized_definition
+
+
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.http import require_GET
+
+import logging
+logger = logging.getLogger(__name__)
 
 # token-related functions        
 def generate_token_for_user(user):
@@ -44,15 +56,16 @@ class SignupView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             user = serializer.save()  # directly get the user instance after saving
-            token = generate_token_for_user(user)
+            refresh = RefreshToken.for_user(user)
             return JsonResponse({
                 'response': 'Successfully registered a new user.',
                 'email': user.email,
-                'token': token
+                'token': str(refresh.access_token),
+                'refresh': str(refresh)
             }, status=status.HTTP_201_CREATED)
         
-        
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class SigninView(APIView):
@@ -105,7 +118,7 @@ class UpdateProfileView(APIView):
 
 
 class ProcessFileView(APIView):
-    parser_class = (FileUploadParser,)
+    parser_class = (FileUploadParser)
 
     def post(self, request):
         file = request.data.get('file')
@@ -117,6 +130,31 @@ class ProcessFileView(APIView):
             return JsonResponse({"topics": topics, "relationships": relationships})
         
         return JsonResponse({'error': 'No file provided'}, status=400)
+
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def get_definition(request):
+
+    permission_classes = [permissions.IsAuthenticated]
+    topic = request.GET.get('topic')
+    if not topic:
+        return JsonResponse({"error": "Missing topic parameter."}, status=400)
+    
+
+    user = request.user
+    email = user.email
+    
+    try:
+        definition = generate_personalized_definition(topic, email)
+        
+
+        return JsonResponse({"definition": definition})
+    except Exception as e:
+        print("error")
+        return JsonResponse({"error": "Failed to generate definition."}, status=500)
+
 
 # class HealthCheckFileView(APIView):
 #     parser_class = (FileUploadParser)

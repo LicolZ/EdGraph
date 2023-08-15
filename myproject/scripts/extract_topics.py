@@ -1,3 +1,4 @@
+#  NeuralNavigate/myproject/scripts/extract_topics.py
 
 import os
 import PyPDF2

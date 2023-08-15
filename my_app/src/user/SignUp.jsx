@@ -17,8 +17,16 @@ export default function SignUp({ switchForm, setUser, closeModal, setShowDropdow
         password,
       });
       const token = response.data.token;
+      const refreshToken = response.data.refresh;
       if (token) {
         localStorage.setItem('token', token);
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken);
+        }
+        // console.log(localStorage.getItem('token'));
+        // console.log(localStorage.getItem('refreshToken'));
+        console.log(response.data);
+
         localStorage.setItem('userEmail', email);  // save the email
         setUser({ email: email }); // update user state after successful sign-in
         closeModal();

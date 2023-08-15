@@ -1,18 +1,88 @@
 // NeuralNavivate/my_app/src/react-flow/buttonNode.jsx
 
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Handle } from 'reactflow';
 import '../App.css';
+import PropTypes from 'prop-types';
+import axios from 'axios'; 
 
+import TopicDefinitions from '../user/TopicDefinitions';
+import UserContext from '../user/UserContext';
 
 const ButtonNode = ({ data }) => {
-  const handleClick = () => {
-    console.log("Button clicked");
-    window.open('http://www.licol.io', "_blank"); // will open the URL in a new tab
+  const user = useContext(UserContext);
+  const [showDefinition, setShowDefinition] = useState(false);
+  const [definition, setDefinition] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // NEW state for error message
+
+
+  async function refreshToken() {
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+    const refreshToken = localStorage.getItem('refreshToken');  // assuming I save the refresh token in local storage
+
+    try {
+        const response = await axios.post(`${baseUrl}/api/token-refresh/`, {
+            refresh: refreshToken
+        });            
+
+        const newAccessToken = response.data.access;
+        localStorage.setItem('token', newAccessToken);
+        return true;
+    } catch (error) {
+        console.error("Error refreshing token:", error.response.data);
+        return null;
+    }
+  }
+
+  const fetchDefinition = async (label, retryCount = 0) => {
+    
+    const email = user?.email;
+  
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+    let token = localStorage.getItem('token');
+
+    try {
+      const response = await axios.get(`${baseUrl}/api/get_definition/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }, 
+        params: {
+          topic: label,
+          email: email
+        }
+      });
+      return response.data.definition;
+    } catch (error) {
+      if (error.response && error.response.status === 401 && retryCount < 1) {
+        const refreshSuccess = await refreshToken();
+        if (refreshSuccess) {
+          return fetchDefinition(label, retryCount + 1);  // Retry once
+        }
+      }
+      console.error(`Error fetching definition!`, error);
+      return null; // Make sure to return null if the fetch fails after all attempts
+    }
+  }
+
+  const handleClick = async () => {
+    const def = await fetchDefinition(data.label);
+    if (def) {
+      setDefinition(def);
+      setShowDefinition(true);
+      setErrorMessage(''); // clear any previous error messages
+    } else {
+      setErrorMessage('Failed to fetch definition. Please try again.'); // set an error message
+    }
+  }
+
+  const handleClose = () => {
+    setShowDefinition(false);
+    setDefinition('');
+    setErrorMessage(''); // clear any error messages
   }
 
   return (
-    <div style={{ background: "#1A192B", border: '1px solid #FFF', borderRadius: '2px', padding: '0px', display: 'flex', alignItems: 'center' }}> {/* Changed padding to '0px' and added 'display: flex' and 'align-items: center' */}
+    <div style={{ background: "#1A192B", border: '1px solid #FFF', borderRadius: '2px', padding: '0px', display: 'flex', alignItems: 'center' }}>
       <Handle
         type="target"
         position="left"
@@ -28,8 +98,15 @@ const ButtonNode = ({ data }) => {
         id="a"
         style={{ background: '#555' }}
       />
+      
+      <TopicDefinitions show={showDefinition} handleClose={handleClose} definition={definition} />
     </div>
   );
 }
+
+ButtonNode.propTypes = {
+  data: PropTypes.object.isRequired
+  // Add other prop validations if necessary.
+};
 
 export default ButtonNode;

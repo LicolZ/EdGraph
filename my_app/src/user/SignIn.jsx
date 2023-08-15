@@ -20,7 +20,9 @@ export default function SignIn({ switchForm, setUser, closeModal, setShowDropdow
       const refreshToken = response.data.refresh;
       if (token) {
         localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', refreshToken);
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken);
+        }
         localStorage.setItem('userEmail', email);
         localStorage.setItem('name', response.data.name); 
         localStorage.setItem('about', response.data.about);

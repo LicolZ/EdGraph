@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-# settings/base.py
+# NeuralNavigate/myproject/myproject/settings/base.py
 
 import os
 from pathlib import Path
