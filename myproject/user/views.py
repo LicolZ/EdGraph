@@ -17,6 +17,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from user.models import CustomUser
+from user.models import SavedDefinition
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -154,6 +155,31 @@ def get_definition(request):
     except Exception as e:
         print("error")
         return JsonResponse({"error": "Failed to generate definition."}, status=500)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def save_definition(request):
+    topic = request.data.get('topic')
+    definition = request.data.get('definition')
+    
+    if not topic or not definition:
+        return JsonResponse({"error": "Missing topic or definition parameter."}, status=400)
+
+    user = request.user
+
+    try:
+        # Check if the user has already saved this exact definition for the given topic
+        existing_def = SavedDefinition.objects.filter(user=user, topic=topic, definition=definition)
+        if not existing_def.exists():
+            SavedDefinition.objects.create(user=user, topic=topic, definition=definition)
+            return JsonResponse({"message": "Definition saved successfully."}, status=200)
+        else:
+            return JsonResponse({"message": "Definition already saved."}, status=400)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Failed to save definition."}, status=500)
 
 
 # class HealthCheckFileView(APIView):

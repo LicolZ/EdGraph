@@ -11,13 +11,13 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
     const textareaRef = useRef(null);
     const modalRef = useRef(null); // Reference for modal positioning
     const [textareaHeight] = useState('auto');
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
     useEffect(() => {
         setUserState(user);
     }, [user]);
 
     async function refreshToken() {
-        const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
         const refreshToken = localStorage.getItem('refreshToken');  // assuming I save the refresh token in local storage
 
         try {
@@ -35,7 +35,7 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
     }
     
     const handleSave = async (retryCount = 0) => {
-        const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+        
         let token = localStorage.getItem('token');
     
         try {

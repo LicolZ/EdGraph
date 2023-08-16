@@ -8,7 +8,12 @@ import { addEdge, useNodesState, useEdgesState, } from 'reactflow'; // Import ad
 import ReactFlowComponent from './react_flow/reactFlowComponent';
 import Authentication from './user/Authentication';
 import { renderUserButton, signOut } from './user/userUtils';
-import { createNode, createEdgesFromRelationships } from './react_flow/reactFlowNodesEdges';
+
+import SavedDefinitions from './user/SavedDefinitions';
+import { fetchSavedDefinitions } from './utils/fetchUtils';
+
+import { submitFile } from './utils/fileUpload';
+
 import Profile from './user/Profile';
 import UserContext from './user/UserContext';
 
@@ -16,23 +21,34 @@ import './App.css';
 import './index.css';
 
 export default function FileUploadComponent() {
+
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [openModal, setOpenModal] = useState(false);
+
   const [user, setUser] = useState(null);
+
   const [showDropdown, setShowDropdown] = useState(false);
-  const [openProfileModal, setOpenProfileModal] = useState(false);
-  const handleUserUpdate = (updatedUser) => {
-    setUser(updatedUser);
-};
+
+  const [openSignInUpModal, setOpenSignInUpModal] = useState(false);
+
+  const [openMyProfileModal, setOpenMyProfileModal] = useState(false);
+
+  const [openSavedDefinitionsModal, setOpenSavedDefinitionsModal] = useState(false);
+  const [savedDefinitions, setSavedDefinitions] = useState([]);
 
   
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
+  // dropdown for logged in user
+  const toggleDropdown = useCallback(() => {
+    setShowDropdown((prevShow) => !prevShow);
+  }, []);
 
 
   useEffect(() => {
@@ -78,57 +94,51 @@ export default function FileUploadComponent() {
     });
   }, []);
 
-  const toggleDropdown = useCallback(() => {
-    setShowDropdown((prevShow) => !prevShow);
+
+  // handlers
+
+  const handleFileUpload = () => {
+    submitFile(file, setNodes, setEdges, setLoading);
+  };
+
+  const handleOpenSignInUpModal = useCallback(() => {
+    setOpenSignInUpModal(true);
   }, []);
 
-
-  // handlers for opening and closing modals
-
-  const handleOpen = useCallback(() => {
-    setOpenModal(true);
+  const handleCloseSignInUpModal = useCallback(() => {
+    setOpenSignInUpModal(false);
   }, []);
 
-  const handleClose = useCallback(() => {
-    setOpenModal(false);
-  }, []);
-
-  const handleOpenProfile = useCallback(() => {
-    setOpenProfileModal(true);
+  const handleOpenMyProfileModal = useCallback(() => {
+    setOpenMyProfileModal(true);
     setShowDropdown(false);
   }, []);
 
-  const handleCloseProfile = useCallback(() => {
-    setOpenProfileModal(false);
+  const handleCloseMyProfileModal = useCallback(() => {
+    setOpenMyProfileModal(false);
   }, []);
 
 
-
-  const submitFile = () => {
-    if (!file) return;
-    setLoading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-    axios.post(`${baseUrl}/process/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }, 
-    })
-    .then(response => {
-      const topics = response.data.topics;
-      const newNodes = topics.map((topic, i) => createNode(topic, i));
-      const newEdges = createEdgesFromRelationships(response.data.relationships, newNodes);
-      setNodes(newNodes);
-      setEdges(newEdges);
-    })
-    .finally(() => setLoading(false));
+  const handleUserUpdate = (updatedUser) => {
+    setUser(updatedUser);
   };
+
+  // open Saved Definitions modal and fetch saved definitions
+  const handleOpenSavedDefinitions = async () => {
+    const definitions = await fetchSavedDefinitions();
+    setSavedDefinitions(definitions);
+    setOpenSavedDefinitionsModal(true);
+  };
+
+  const handleCloseSavedDefinitionsModal = useCallback(() => {
+    setOpenSavedDefinitionsModal(false);
+  }, []);
+
 
   return (
     <div className="container">
       <div style={{ textAlign: 'right' }}>
-        {renderUserButton(user, handleOpen, toggleDropdown, showDropdown, signOut, setUser, handleOpenProfile, handleCloseProfile)}
+        {renderUserButton(user, handleOpenSignInUpModal, toggleDropdown, showDropdown, signOut, setUser, handleOpenMyProfileModal, handleCloseMyProfileModal, handleOpenSavedDefinitions, handleCloseSavedDefinitionsModal)}
       </div>
       <Helmet>
         <title>NeuralNavigate</title>
@@ -137,7 +147,7 @@ export default function FileUploadComponent() {
       <h1 id="upload-text">Upload your Machine Learning & AI Research Paper</h1>
       <div className="upload-section">
         <input type="file" accept=".pdf" onChange={event => setFile(event.target.files[0])} />
-        <button id="generateGraphButton" onClick={submitFile}>
+        <button id="generateGraphButton" onClick={handleFileUpload}>
           {loading ? "Loading..." : "Generate Graph"}
         </button>
       </div>
@@ -151,28 +161,37 @@ export default function FileUploadComponent() {
         />
       </UserContext.Provider>
       <Modal
-        show={openModal}
-        onHide={handleClose}
+        show={openSignInUpModal}
+        onHide={handleCloseSignInUpModal}
         className="signin-signup-modal"
       >
-        <button id="loginButton" onClick={handleClose}>X</button>
+        <button id="loginButton" onClick={handleCloseSignInUpModal}>X</button>
         <Modal.Header>
           <Modal.Title className="signin-signup-modal-title">Neural Navigate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Authentication setUser={setUser} closeModal={handleClose} setShowDropdown={setShowDropdown}/>
+          <Authentication setUser={setUser} closeModal={handleCloseSignInUpModal} setShowDropdown={setShowDropdown}/>
         </Modal.Body>
       </Modal>
 
       {/* My Profile modal */}
       <Modal
-        show={openProfileModal}
-        onHide={handleCloseProfile}
+        show={openMyProfileModal}
+        onHide={handleCloseMyProfileModal}
         className="user-profile-modal"
       >
-        <Profile user={user} closeModal={handleCloseProfile} setShowDropdown={setShowDropdown} onUserUpdate={handleUserUpdate}/>
+        <Profile user={user} closeModal={handleCloseMyProfileModal} setShowDropdown={setShowDropdown} onUserUpdate={handleUserUpdate}/>
         
       </Modal>
+
+      {/* Saved Definition modal */}
+      <SavedDefinitions
+        show={openSavedDefinitionsModal} 
+        onHide={handleCloseSavedDefinitionsModal}
+        definitions={savedDefinitions} 
+        setDefinitions={setSavedDefinitions}
+        closeModal={handleCloseSavedDefinitionsModal}
+      />
 
     </div>
   );

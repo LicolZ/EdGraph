@@ -36,3 +36,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+# user's saved definitions 
+class SavedDefinition(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    topic = models.CharField(max_length=255)
+    definition = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)  # for tracking when the definition was saved
+
+    class Meta:
+        unique_together = ('user', 'topic', 'definition')  # to ensure the same definition isn't saved twice for the same topic and user
+

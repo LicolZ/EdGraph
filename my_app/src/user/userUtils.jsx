@@ -15,7 +15,7 @@ export const signOut = (setUser,  handleCloseProfile) => {
     // You may need to make an axios request here.
   };
 
-export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut, setUser, handleOpenProfile, handleCloseProfile) => {
+export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut, setUser, handleOpenProfile, handleCloseProfile, handleOpenSavedDefinitions) => {
     if (user && user.email) {
       const displayEmail = user.name || user.email.split('@')[0];
       return (
@@ -30,6 +30,7 @@ export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown,
                 <div className="dropdown-items">
                   <button onClick={() => { handleOpenProfile() }}>My Profile</button>
                   <button onClick={() => { /* go to Saved Graphs */ }}>Saved Graphs</button>
+                  <button onClick={() => { handleOpenSavedDefinitions() }}>Saved Definitions</button>
                   <button onClick={() => { signOut(setUser, handleCloseProfile) }}>Sign Out →</button>
                 </div>
               </div>

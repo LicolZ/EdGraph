@@ -265,7 +265,6 @@
   padding: 8px 13px;
 }
 
-/* disable vertical resizing of the textarea */
 .user-profile-modal-input-fields textarea {
   box-sizing: border-box;  /* ensure padding is inside the element, not outside */
   height: 28px;  
@@ -352,12 +351,71 @@
   color: #25233d; 
   border: none;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 13px;
   cursor: pointer;
 }
 
 .topic-definitions-modal-save-button:hover {
   color: darkgrey; /* On hover, X becomes dark grey */
+}
+
+/* SavedDefinitions Modal */
+.saved-definitions-modal {
+  position: absolute;
+  top: 55%;
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1100;
+}
+
+.saved-definitions-modal-title {
+  font-family: 'Inter', sans-serif;  
+  font-size: 15px; 
+  text-align: center;
+  color: #07042f;
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+.saved-definitions-modal li {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px; /* adjust if necessary */
+  margin-bottom: 10px; /* spacing between list items */
+  color: #25233d; 
+}
+
+.close-button {
+  position: absolute;
+  top: 20px; /* adjust if necessary */
+  right: 20px; 
+  background-color: transparent; 
+  color: #25233d; 
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: darkgrey;
+}
+
+.modal {
+  display: none; /* default to not display */
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
 }
 
 
