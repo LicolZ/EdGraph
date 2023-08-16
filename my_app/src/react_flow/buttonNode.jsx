@@ -35,11 +35,11 @@ const ButtonNode = ({ data }) => {
   }
 
   const fetchDefinition = async (label, retryCount = 0) => {
-    
+
     const email = user?.email;
-  
     const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
     let token = localStorage.getItem('token');
+    
 
     try {
       const response = await axios.get(`${baseUrl}/api/get_definition/`, {
@@ -51,7 +51,16 @@ const ButtonNode = ({ data }) => {
           email: email
         }
       });
-      return response.data.definition;
+
+      const data = await response.data;
+      if (data && data.definition) {
+        return data.definition;
+      } else {
+          console.error("No definition found in response:", data);
+          return null;
+      }
+      
+
     } catch (error) {
       if (error.response && error.response.status === 401 && retryCount < 1) {
         const refreshSuccess = await refreshToken();
@@ -59,21 +68,22 @@ const ButtonNode = ({ data }) => {
           return fetchDefinition(label, retryCount + 1);  // Retry once
         }
       }
-      console.error(`Error fetching definition!`, error);
-      return null; // Make sure to return null if the fetch fails after all attempts
+      console.error("Error:", error);
+      return null;
     }
   }
 
   const handleClick = async () => {
+    setShowDefinition(true);
     const def = await fetchDefinition(data.label);
     if (def) {
-      setDefinition(def);
-      setShowDefinition(true);
+      setDefinition(prev => prev + def); // Change the way you set state
       setErrorMessage(''); // clear any previous error messages
     } else {
       setErrorMessage('Failed to fetch definition. Please try again.'); // set an error message
     }
   }
+
 
   const handleClose = () => {
     setShowDefinition(false);
