@@ -4,28 +4,11 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import axios from 'axios'; 
-
+import { refreshToken } from '../utils/tokenUtils';
 
 
 const TopicDefinitions = ({ show, handleClose, definition, user, topic }) => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-
-  async function refreshToken() {
-    const refreshToken = localStorage.getItem('refreshToken');  // assuming I save the refresh token in local storage
-
-    try {
-        const response = await axios.post(`${baseUrl}/api/token-refresh/`, {
-            refresh: refreshToken
-        });            
-
-        const newAccessToken = response.data.access;
-        localStorage.setItem('token', newAccessToken);
-        return true;
-    } catch (error) {
-        console.error("Error refreshing token:", error.response.data);
-        return null;
-    }
-  }
 
   const handleSave = async (retryCount = 0) => {
     let token = localStorage.getItem('token');

@@ -1,15 +1,14 @@
 // NeuralNavivate/my_app/src/App.jsx
 
 import React, { useCallback, useState, useEffect } from 'react';
-import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 import { Helmet } from 'react-helmet'; 
 import { addEdge, useNodesState, useEdgesState, } from 'reactflow'; // Import addEdge from reactflow
 import ReactFlowComponent from './react_flow/reactFlowComponent';
 import Authentication from './user/Authentication';
-import { renderUserButton, signOut } from './user/userUtils';
+import { renderUserButton, signOut } from './utils/userUtils';
 
-import SavedDefinitions from './user/SavedDefinitions';
+import SavedDefinitionsComponent from './components/SavedDefinitionsComponent';
 import { fetchSavedDefinitions } from './utils/fetchUtils';
 
 import { submitFile } from './utils/fileUpload';
@@ -185,7 +184,7 @@ export default function FileUploadComponent() {
       </Modal>
 
       {/* Saved Definition modal */}
-      <SavedDefinitions
+      <SavedDefinitionsComponent
         show={openSavedDefinitionsModal} 
         onHide={handleCloseSavedDefinitionsModal}
         definitions={savedDefinitions} 

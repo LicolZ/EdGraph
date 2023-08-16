@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { refreshToken } from '../utils/tokenUtils';
+
 
 export default function Profile({ user, closeModal, onUserUpdate }) {
     
@@ -13,26 +15,20 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
     const [textareaHeight] = useState('auto');
     const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
+
     useEffect(() => {
         setUserState(user);
+
+        // async function within the useEffect to handle refreshToken
+        const initiateRefreshToken = async () => {
+            await refreshToken();
+        };
+
+        initiateRefreshToken();
+
     }, [user]);
 
-    async function refreshToken() {
-        const refreshToken = localStorage.getItem('refreshToken');  // assuming I save the refresh token in local storage
-
-        try {
-            const response = await axios.post(`${baseUrl}/api/token-refresh/`, {
-                refresh: refreshToken
-            });            
     
-            const newAccessToken = response.data.access;
-            localStorage.setItem('token', newAccessToken);
-            return true;
-        } catch (error) {
-            console.error("Error refreshing token:", error.response.data);
-            return null;
-        }
-    }
     
     const handleSave = async (retryCount = 0) => {
         

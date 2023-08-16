@@ -2,19 +2,6 @@
 
 import React from 'react';
 
-export const signOut = (setUser,  handleCloseProfile) => {
-    // Remove token and user email from local storage
-    localStorage.removeItem('token');
-    localStorage.removeItem('userEmail');
-    // Reset the user state
-    setUser(null);
-
-    // close Profile modal
-    handleCloseProfile();
-    // Optionally: Inform the backend to invalidate the token (if needed)
-    // You may need to make an axios request here.
-  };
-
 export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown, signOut, setUser, handleOpenProfile, handleCloseProfile, handleOpenSavedDefinitions) => {
     if (user && user.email) {
       const displayEmail = user.name || user.email.split('@')[0];
@@ -42,9 +29,19 @@ export const renderUserButton = (user, handleOpen, toggleDropdown, showDropdown,
       return <div id="loginButton" onClick={handleOpen}>Sign In</div>;
     }
   };
-
   
   
+  export const signOut = (setUser,  handleCloseProfile) => {
+    // remove token and user email from local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userEmail');
+    // reset the user state
+    setUser(null);
 
+    // close Profile modal
+    handleCloseProfile();
+    // optionally: Inform the backend to invalidate the token (if needed)
+    // You may need to make an axios request here.
+  };
   
   
