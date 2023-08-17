@@ -42,7 +42,7 @@ const ButtonNode = ({ data }) => {
     
 
     try {
-      const response = await axios.get(`${baseUrl}/api/get_definition/`, {
+      const response = await axios.get(`${baseUrl}/api/get-definition/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }, 

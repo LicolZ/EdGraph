@@ -119,7 +119,6 @@ class UpdateProfileView(APIView):
         return JsonResponse({"message": "Profile updated successfully", "user": serializer.data}, status=status.HTTP_200_OK)
 
 
-
 class ProcessFileView(APIView):
     parser_class = (FileUploadParser)
 
@@ -144,7 +143,6 @@ def get_definition(request):
     topic = request.GET.get('topic')
     if not topic:
         return JsonResponse({"error": "Missing topic parameter."}, status=400)
-    
 
     user = request.user
     email = user.email
@@ -152,19 +150,16 @@ def get_definition(request):
     try:
         definition = generate_personalized_definition(topic, email)
         
-
         return JsonResponse({"definition": definition})
     except Exception as e:
         print("error")
         return JsonResponse({"error": "Failed to generate definition."}, status=500)
-
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def save_definition(request):
     topic = request.data.get('topic')
-    print(topic)
     definition = request.data.get('definition')
     
     if not topic or not definition:
@@ -173,13 +168,25 @@ def save_definition(request):
     user = request.user
 
     try:
-        # Check if the user has already saved this exact definition for the given topic
+        # check if the user has already saved this exact definition for the given topic
         existing_def = SavedDefinition.objects.filter(user=user, topic=topic, definition=definition)
         if not existing_def.exists():
             SavedDefinition.objects.create(user=user, topic=topic, definition=definition)
-            return JsonResponse({"message": "Definition saved successfully."}, status=200)
+            # fetch updated definitions after saving
+            saved_definitions = SavedDefinition.objects.filter(user=user)
+            serializer = SavedDefinitionSerializer(saved_definitions, many=True)
+            return JsonResponse({
+                "message": "Definition saved successfully.",
+                "saved_definitions": serializer.data
+            }, status=200)
         else:
-            return JsonResponse({"message": "Definition already saved."}, status=400)
+            # fetch existing definitions even if not saving new ones
+            saved_definitions = SavedDefinition.objects.filter(user=user)
+            serializer = SavedDefinitionSerializer(saved_definitions, many=True)
+            return JsonResponse({
+                "message": "Definition already saved.",
+                "saved_definitions": serializer.data
+            }, status=400)
     except Exception as e:
         print(e)
         return JsonResponse({"error": "Failed to save definition."}, status=500)

@@ -34,7 +34,7 @@ urlpatterns = [
     path('update-profile/', UpdateProfileView.as_view(), name='update_profile'),
     path('api/get-definition/', get_definition, name='get_definition'), 
     path('api/save-definition/', save_definition, name='save_definition'), 
-    path('api/get-saved-definitions/', get_saved_definitions, name='get-saved-definitions'),
+    path('api/get-saved-definitions/', get_saved_definitions, name='get_saved_definitions'),
 
     # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]

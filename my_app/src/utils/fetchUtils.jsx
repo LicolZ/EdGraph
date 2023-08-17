@@ -10,7 +10,7 @@ export const fetchSavedDefinitions = async (retryCount = 0) => {
     console.log(token)
     try {
         
-        const response = await axios.get(`${baseUrl}/api/get_saved_definitions/`, { 
+        const response = await axios.get(`${baseUrl}/api/get-saved-definitions/`, { 
             headers: {
                 'Authorization': `Bearer ${token}`
             }
