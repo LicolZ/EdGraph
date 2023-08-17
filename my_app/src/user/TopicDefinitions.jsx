@@ -14,7 +14,7 @@ const TopicDefinitions = ({ show, handleClose, definition, user, topic }) => {
     let token = localStorage.getItem('token');
 
     try {
-      const response = await axios.post(`${baseUrl}/api/save_definition/`, {
+      const response = await axios.post(`${baseUrl}/api/save-definition/`, {
         topic: topic,
         definition: definition
       }, {

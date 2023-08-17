@@ -24,6 +24,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # local imports
 from scripts.extract_topics import ProcessFile
 from user.serializers import UserSerializer
+from user.serializers import SavedDefinitionSerializer
+
 from scripts.generate_definitions import generate_personalized_definition
 
 
@@ -162,6 +164,7 @@ def get_definition(request):
 @permission_classes([IsAuthenticated])
 def save_definition(request):
     topic = request.data.get('topic')
+    print(topic)
     definition = request.data.get('definition')
     
     if not topic or not definition:
@@ -181,6 +184,19 @@ def save_definition(request):
         print(e)
         return JsonResponse({"error": "Failed to save definition."}, status=500)
 
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_saved_definitions(request):
+    user = request.user
+    try:
+        saved_definitions = SavedDefinition.objects.filter(user=user)
+        serializer = SavedDefinitionSerializer(saved_definitions, many=True)
+        return JsonResponse({"definitions": serializer.data}, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error fetching saved definitions: {str(e)}")  # Using the logger you already set up
+        return JsonResponse({"error": "Failed to fetch definitions."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # class HealthCheckFileView(APIView):
 #     parser_class = (FileUploadParser)

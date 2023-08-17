@@ -35,7 +35,7 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
         let token = localStorage.getItem('token');
     
         try {
-            const response = await axios.put(`${baseUrl}/update_profile/`, {
+            const response = await axios.put(`${baseUrl}/update-profile/`, {
                 name: name,
                 about: about,
             }, {
@@ -81,7 +81,6 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
         target.style.height = `${target.scrollHeight}px`;
     }
     
-    console.log("Profile component is re-rendering with name:", name, "and about:", about);
     return (
         <div className="user-profile-modal" ref={modalRef}>
             <h2 className="user-profile-modal-title">My Profile</h2>

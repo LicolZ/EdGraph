@@ -21,7 +21,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from user.views import SignupView, SigninView, ProcessFileView, UpdateProfileView, get_definition, save_definition
+from user.views import SignupView, SigninView, ProcessFileView, UpdateProfileView, get_definition, save_definition, get_saved_definitions
 
 urlpatterns = [
     path('process/', ProcessFileView.as_view(), name='process_file'),
@@ -31,9 +31,10 @@ urlpatterns = [
     path('api/token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/signup/', SignupView.as_view(), name='signup'),
     path('api/signin/', SigninView.as_view(), name='signin'),
-    path('update_profile/', UpdateProfileView.as_view(), name='update-profile'),
-    path('api/get_definition/', get_definition, name='get-definition'), 
-    path('api/save_definition/', save_definition, name='save_definition'), 
-    
+    path('update-profile/', UpdateProfileView.as_view(), name='update_profile'),
+    path('api/get-definition/', get_definition, name='get_definition'), 
+    path('api/save-definition/', save_definition, name='save_definition'), 
+    path('api/get-saved-definitions/', get_saved_definitions, name='get-saved-definitions'),
+
     # path('healthcheck/', HealthCheckFileView.as_view(), name='health_check'),
 ]

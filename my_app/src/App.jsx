@@ -124,9 +124,9 @@ export default function FileUploadComponent() {
 
   // open Saved Definitions modal and fetch saved definitions
   const handleOpenSavedDefinitions = async () => {
+    setOpenSavedDefinitionsModal(true);
     const definitions = await fetchSavedDefinitions();
     setSavedDefinitions(definitions);
-    setOpenSavedDefinitionsModal(true);
   };
 
   const handleCloseSavedDefinitionsModal = useCallback(() => {
