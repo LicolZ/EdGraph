@@ -1,11 +1,11 @@
-// NeuralNavivate/my_app/src/user/Authentication.jsx
+// NeuralNavivate/my_app/src/components/AuthenticationComponent.jsx
 
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
+import SignIn from '../user/SignIn';
+import SignUp from '../user/SignUp';
 
-export default function Authentication({ setUser, closeModal, setShowDropdown }) {
+export default function AuthenticationComponent({ setUser, closeModal, setShowDropdown }) {
   const [isSignUp, setIsSignUp] = useState(false);
 
   return (

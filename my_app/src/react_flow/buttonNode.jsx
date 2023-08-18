@@ -9,30 +9,14 @@ import axios from 'axios';
 import TopicDefinitions from '../user/TopicDefinitions';
 import UserContext from '../user/UserContext';
 
+import { refreshToken } from '../utils/tokenUtils';
+
+
 const ButtonNode = ({ data }) => {
   const user = useContext(UserContext);
   const [showDefinition, setShowDefinition] = useState(false);
   const [definition, setDefinition] = useState('');
   const [errorMessage, setErrorMessage] = useState(''); // NEW state for error message
-
-
-  async function refreshToken() {
-    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-    const refreshToken = localStorage.getItem('refreshToken');  // assuming I save the refresh token in local storage
-
-    try {
-        const response = await axios.post(`${baseUrl}/api/token-refresh/`, {
-            refresh: refreshToken
-        });            
-
-        const newAccessToken = response.data.access;
-        localStorage.setItem('token', newAccessToken);
-        return true;
-    } catch (error) {
-        console.error("Error refreshing token:", error.response.data);
-        return null;
-    }
-  }
 
   const fetchDefinition = async (label, retryCount = 0) => {
 

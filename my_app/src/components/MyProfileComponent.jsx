@@ -81,7 +81,7 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
         target.style.height = `${target.scrollHeight}px`;
     }
     
-    return (
+    return ( 
         <div className="user-profile-modal" ref={modalRef}>
             <h2 className="user-profile-modal-title">My Profile</h2>
             

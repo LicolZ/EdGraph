@@ -1,9 +1,9 @@
-// NeuralNavivate/my_app/src/utils/fileUpload.js
+// NeuralNavivate/my_app/src/utils/graphUtils.js
 
 import axios from 'axios';
 import { createNode, createEdgesFromRelationships } from '../react_flow/reactFlowNodesEdges';
 
-export async function submitFile(file, setNodes, setEdges, setLoading) {
+export async function generateGraph(file, setNodes, setEdges, setLoading) {
     if (!file) return;
     
     setLoading(true);

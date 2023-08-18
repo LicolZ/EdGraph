@@ -1,10 +1,13 @@
+// NeuralNavivate/my_app/src/components/reactFlowComponent.jsx
+
+
 import React from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
   Background,
 } from 'reactflow';
-import ButtonNode from './buttonNode';
+import ButtonNode from '../react_flow/buttonNode';
 
 import 'reactflow/dist/style.css';
 import '../App.css';
@@ -14,7 +17,6 @@ const nodeTypes = {
 };
 
 export default function ReactFlowComponent({ nodes, edges, onConnect, onNodesChange, onEdgesChange, user }) {
-  
 
   return (
     <div id="topicsContainer">

@@ -7,23 +7,22 @@ import { Helmet } from 'react-helmet';
 import { addEdge, useNodesState, useEdgesState } from 'reactflow';
 
 // internal imports
-import ReactFlowComponent from './react_flow/reactFlowComponent';
-import Authentication from './user/Authentication';
+import ReactFlowComponent from './components/ReactFlowComponent';
+import AuthenticationComponent from './components/AuthenticationComponent';
 import { renderUserButton, signOut } from './utils/userUtils';
 import SavedDefinitionsComponent from './components/SavedDefinitionsComponent';
 import { fetchSavedDefinitions } from './utils/fetchUtils';
-import { submitFile } from './utils/fileUpload';
-import Profile from './user/Profile';
+import { generateGraph } from './utils/graphUtils';
+import Profile from './components/MyProfileComponent';
 import UserContext from './user/UserContext';
 
 // styles imports
 import './App.css';
 import './index.css';
 
-export default function FileUploadComponent() {
+export default function NeuralNavigateApp() {
 
   // states
-
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -97,7 +96,7 @@ export default function FileUploadComponent() {
 
   // handlers
   const handleFileUpload = () => {
-    submitFile(file, setNodes, setEdges, setLoading);
+    generateGraph(file, setNodes, setEdges, setLoading);
   };
 
   const handleOpenSignInUpModal = useCallback(() => {
@@ -168,7 +167,7 @@ export default function FileUploadComponent() {
         onHide={handleCloseSignInUpModal}
         className="signin-signup-modal"
       >
-        <Authentication 
+        <AuthenticationComponent 
           setUser={setUser} 
           closeModal={handleCloseSignInUpModal} 
           setShowDropdown={setShowDropdown}
@@ -181,7 +180,12 @@ export default function FileUploadComponent() {
         onHide={handleCloseMyProfileModal}
         className="user-profile-modal"
       >
-        <Profile user={user} closeModal={handleCloseMyProfileModal} setShowDropdown={setShowDropdown} onUserUpdate={handleUserUpdate}/>
+        <Profile 
+          user={user} 
+          closeModal={handleCloseMyProfileModal} 
+          setShowDropdown={setShowDropdown} 
+          onUserUpdate={handleUserUpdate}
+        />
       </Modal>
 
       {/* Saved Definition modal */}
@@ -198,6 +202,6 @@ export default function FileUploadComponent() {
 
 export function App() {
   return (
-    <FileUploadComponent />
+    <NeuralNavigateApp />
   );
 }
