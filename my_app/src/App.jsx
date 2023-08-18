@@ -1,25 +1,28 @@
 // NeuralNavivate/my_app/src/App.jsx
 
+// external imports
 import React, { useCallback, useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
-import { Helmet } from 'react-helmet'; 
-import { addEdge, useNodesState, useEdgesState, } from 'reactflow'; // Import addEdge from reactflow
+import { Helmet } from 'react-helmet';
+import { addEdge, useNodesState, useEdgesState } from 'reactflow';
+
+// internal imports
 import ReactFlowComponent from './react_flow/reactFlowComponent';
 import Authentication from './user/Authentication';
 import { renderUserButton, signOut } from './utils/userUtils';
-
 import SavedDefinitionsComponent from './components/SavedDefinitionsComponent';
 import { fetchSavedDefinitions } from './utils/fetchUtils';
-
 import { submitFile } from './utils/fileUpload';
-
 import Profile from './user/Profile';
 import UserContext from './user/UserContext';
 
+// styles imports
 import './App.css';
 import './index.css';
 
 export default function FileUploadComponent() {
+
+  // states
 
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -31,14 +34,13 @@ export default function FileUploadComponent() {
 
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const [openSignInUpModal, setOpenSignInUpModal] = useState(false);
-
-  const [openMyProfileModal, setOpenMyProfileModal] = useState(false);
-
-  const [openSavedDefinitionsModal, setOpenSavedDefinitionsModal] = useState(false);
+  const [modals, setModals] = useState({
+    signInUpModal: false,
+    myProfileModal: false,
+    savedDefinitionsModal: false
+  });
   const [savedDefinitions, setSavedDefinitions] = useState([]);
 
-  
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -80,7 +82,6 @@ export default function FileUploadComponent() {
     };
   }, []);
   
-  
 
   useEffect(() => {
     const userEmail = localStorage.getItem('userEmail');
@@ -95,26 +96,25 @@ export default function FileUploadComponent() {
 
 
   // handlers
-
   const handleFileUpload = () => {
     submitFile(file, setNodes, setEdges, setLoading);
   };
 
   const handleOpenSignInUpModal = useCallback(() => {
-    setOpenSignInUpModal(true);
+    setModals(prev => ({ ...prev, signInUpModal: true }));
   }, []);
 
   const handleCloseSignInUpModal = useCallback(() => {
-    setOpenSignInUpModal(false);
+      setModals(prev => ({ ...prev, signInUpModal: false }));
   }, []);
 
   const handleOpenMyProfileModal = useCallback(() => {
-    setOpenMyProfileModal(true);
-    setShowDropdown(false);
+      setModals(prev => ({ ...prev, myProfileModal: true }));
+      setShowDropdown(false);
   }, []);
 
   const handleCloseMyProfileModal = useCallback(() => {
-    setOpenMyProfileModal(false);
+      setModals(prev => ({ ...prev, myProfileModal: false }));
   }, []);
 
 
@@ -124,17 +124,18 @@ export default function FileUploadComponent() {
 
   // open Saved Definitions modal and fetch saved definitions
   const handleOpenSavedDefinitions = async () => {
-    setOpenSavedDefinitionsModal(true);
+    setModals(prev => ({ ...prev, savedDefinitionsModal: true }));
     const definitions = await fetchSavedDefinitions();
     setSavedDefinitions(definitions);
   };
 
   const handleCloseSavedDefinitionsModal = useCallback(() => {
-    setOpenSavedDefinitionsModal(false);
+      setModals(prev => ({ ...prev, savedDefinitionsModal: false }));
   }, []);
 
 
   return (
+    
     <div className="container">
       <div style={{ textAlign: 'right' }}>
         {renderUserButton(user, handleOpenSignInUpModal, toggleDropdown, showDropdown, signOut, setUser, handleOpenMyProfileModal, handleCloseMyProfileModal, handleOpenSavedDefinitions, handleCloseSavedDefinitionsModal)}
@@ -150,6 +151,7 @@ export default function FileUploadComponent() {
           {loading ? "Loading..." : "Generate Graph"}
         </button>
       </div>
+
       <UserContext.Provider value={user}>
         <ReactFlowComponent 
           nodes={nodes}
@@ -159,39 +161,37 @@ export default function FileUploadComponent() {
           onEdgesChange={onEdgesChange}
         />
       </UserContext.Provider>
+
+      {/* Authentication modal */}
       <Modal
-        show={openSignInUpModal}
+        show={modals.signInUpModal}
         onHide={handleCloseSignInUpModal}
         className="signin-signup-modal"
       >
-        <button id="loginButton" onClick={handleCloseSignInUpModal}>X</button>
-        <Modal.Header>
-          <Modal.Title className="signin-signup-modal-title">Neural Navigate</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Authentication setUser={setUser} closeModal={handleCloseSignInUpModal} setShowDropdown={setShowDropdown}/>
-        </Modal.Body>
+        <Authentication 
+          setUser={setUser} 
+          closeModal={handleCloseSignInUpModal} 
+          setShowDropdown={setShowDropdown}
+        />
       </Modal>
 
       {/* My Profile modal */}
       <Modal
-        show={openMyProfileModal}
+        show={modals.myProfileModal}
         onHide={handleCloseMyProfileModal}
         className="user-profile-modal"
       >
         <Profile user={user} closeModal={handleCloseMyProfileModal} setShowDropdown={setShowDropdown} onUserUpdate={handleUserUpdate}/>
-        
       </Modal>
 
       {/* Saved Definition modal */}
       <SavedDefinitionsComponent
-        show={openSavedDefinitionsModal} 
+        show={modals.savedDefinitionsModal} 
         onHide={handleCloseSavedDefinitionsModal}
         definitions={savedDefinitions} 
         setDefinitions={setSavedDefinitions}
         closeModal={handleCloseSavedDefinitionsModal}
       />
-
     </div>
   );
 }
