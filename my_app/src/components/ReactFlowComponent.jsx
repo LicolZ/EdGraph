@@ -1,4 +1,4 @@
-// NeuralNavivate/my_app/src/components/reactFlowComponent.jsx
+// NeuralNavivate/my_app/src/components/ReactFlowComponent.jsx
 
 
 import React from 'react';

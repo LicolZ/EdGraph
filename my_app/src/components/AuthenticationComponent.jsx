@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import SignIn from '../user/SignIn';
 import SignUp from '../user/SignUp';
 
-export default function AuthenticationComponent({ setUser, closeModal, setShowDropdown }) {
+export default function Authentication({ setUser, closeModal, setShowDropdown }) {
   const [isSignUp, setIsSignUp] = useState(false);
 
   return (

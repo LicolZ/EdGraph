@@ -1,11 +1,11 @@
-// NeuralNavivate/my_app/src/user/Profile.jsx
+// NeuralNavivate/my_app/src/components/MyProfileComponent.jsx
 
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { refreshToken } from '../utils/tokenUtils';
 
 
-export default function Profile({ user, closeModal, onUserUpdate }) {
+export default function MyProfile({ user, closeModal, onUserUpdate }) {
     
     const [userState, setUserState] = useState(user);
     const [name, setName] = useState(user ? user.name || user.email.split('@')[0] : '');
@@ -27,8 +27,6 @@ export default function Profile({ user, closeModal, onUserUpdate }) {
         initiateRefreshToken();
 
     }, [user]);
-
-    
     
     const handleSave = async (retryCount = 0) => {
         

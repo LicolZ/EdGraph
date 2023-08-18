@@ -1,10 +1,10 @@
-// NeuralNavivate/my_app/src/user/SavedDefinitionsComponent.jsx
+// NeuralNavivate/my_app/src/components/SavedDefinitionsComponent.jsx
 
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import '../App.css';
 
-const SavedDefinitionsComponent = ({ show, onHide, definitions, closeModal }) => {
+export default function SavedDefinitions({ show, onHide, definitions, closeModal }) {
     return (
         <Modal
             show={show}
@@ -25,6 +25,3 @@ const SavedDefinitionsComponent = ({ show, onHide, definitions, closeModal }) =>
         </Modal>
     );
 }
-
-export default SavedDefinitionsComponent;
-
